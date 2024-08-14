@@ -1,0 +1,39 @@
+General git command lines
+
+>cls - clearscreen
+>dir - check current folder
+>cd foldername - go in folder
+>cd .. - got out folder
+
+>git version
+>git config --global user.name "Your Name"
+>git config --global user.email your@email.com
+>git config --global core.editor "code --wait" (set vsc as default editor)
+
+>git init - initiate repository (.git file appear in tht folder)
+>git status - if red = Not Tracked & Not Staged
+>git add filename. - to tell Git to Track the file changes
+>git commit -m "Commit message" - saves tracked files
+>git show - latest commit details
+>git log - lists of commits
+
+>git branch -  see existing branch
+>git bran-m newbranchname - rename current branch
+>git checkout -b newbranchname - making new branch
+>git checkout branchname - go to desired branch
+>git merge main - merge main into branch1 (make sure current branch is branch1)
+>git merge branch1 -  merge branch1 into main (make sure current branch is main)
+conflict merges - resolve in vsc
+>git branch -d branch1 - delete branch
+
+>git push -u origin branchname - push local branch to remote
+>git fetch origin branchname -  get branch from friends pushed to github
+>git checkout branchname
+
+>git checkout main
+>git pull origin main
+>git checkout branchname
+>git merge main
+'compare and pull request'
+'create pull request'
+'merge pull request'
