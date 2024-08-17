@@ -12,11 +12,11 @@ pygame.display.set_caption("Roll")
 #background_image2 = pygame.image.load("")
 
 #set up button
-start_img = pygame.image.load("start.png").convert_alpha()
-exit_img = pygame.image.load("exit.png").convert_alpha()
-menu_img = pygame.image.load("menu.png").convert_alpha()
-roll_img = pygame.image.load("roll.png").convert_alpha()
-setting_img = pygame.image.load("setting.png").convert_alpha()
+start_img = pygame.image.load("Images/start.png").convert_alpha()
+exit_img = pygame.image.load("Images/exit.png").convert_alpha()
+menu_img = pygame.image.load("Images/menu.png").convert_alpha()
+roll_img = pygame.image.load("Images/roll.png").convert_alpha()
+setting_img = pygame.image.load("Images/setting.png").convert_alpha()
 
 #create button instances
 start_button = button.Button(160, 250, start_img, width = 300, height = 150)
