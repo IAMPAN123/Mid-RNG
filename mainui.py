@@ -1,5 +1,7 @@
 import pygame
 import button
+import random
+import Rolling as r
 
 pygame.init()
 
@@ -30,7 +32,16 @@ def menu():
     print("beg open")
 
 def roll():
-    print("roll press")
+    for x in r.Rarity:
+            NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
+            ActualFinalChance = 1/NotActualFinalChance
+            Result = random.randint(1, int(ActualFinalChance))
+            if Result == 1:
+                print(x)
+                r.BonusRollCount += 1
+                break
+            else:
+                continue
 
 def setting():
     print("setting open")

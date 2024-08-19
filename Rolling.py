@@ -22,21 +22,21 @@ def FinalChance(Chance, Luck, Bonus):
     RollChance = Chance*((Luck*Bonus))
     return(RollChance)
 #Rolling System
-run = True
-while run:
-    userinput = input()
-    if userinput == 'roll':
-        for x in Rarity:
-            NotActualFinalChance = (FinalChance(1/(Rarity[x]), Luck, Bonus))
-            ActualFinalChance = 1/NotActualFinalChance
-            Result = random.randint(1, int(ActualFinalChance))
-            if Result == 1:
-                print(x)
-                BonusRollCount += 1
-                break
-            else:
-                continue
-    elif userinput == 'exit':
-        run = False
-    else:
-        print('Input error')
+#run = True
+#while run:
+#    userinput = input()
+#    if userinput == 'roll':
+#        for x in Rarity:
+#            NotActualFinalChance = (FinalChance(1/(Rarity[x]), Luck, Bonus))
+#            ActualFinalChance = 1/NotActualFinalChance
+#            Result = random.randint(1, int(ActualFinalChance))
+#            if Result == 1:
+#                print(x)
+#                BonusRollCount += 1
+#                break
+#            else:
+#                continue
+#    elif userinput == 'exit':
+#        run = False
+#    else:
+#        print('Input error')
