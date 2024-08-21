@@ -1,1 +1,1 @@
-{}
+{'rarity': 'rare', 'count': '1', 'name': 'aura'}

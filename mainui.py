@@ -2,12 +2,18 @@ import pygame
 import button
 import random
 import Rolling as r
+import Currency as c
 
 pygame.init()
+pygame.font.init()
 
 #set up screen
 screen = pygame.display.set_mode((600,700))
 pygame.display.set_caption("Roll")
+
+#set up text and font
+mfont = pygame.font.SysFont("Comic Sans MS", 30)
+gdisplay = mfont.render(f'Gold = {c.gold}', False, (0, 0, 0))
 
 #set up bg
 #background_image1 = pygame.image.load("")
@@ -35,14 +41,20 @@ def roll():
     for x in r.Rarity:
             NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
             ActualFinalChance = 1/NotActualFinalChance
-            Result = random.randint(1, int(ActualFinalChance))
-            if Result == 1:
-                print(x)
-                r.BonusRollCount += 1
-                break
-            else:
-                continue
-
+            try:
+                Result = random.randint(1, int(ActualFinalChance))
+                if Result == 1:
+                    print(x)
+                    r.BonusRollCount += 1
+                    if r.BonusRollCount == 10:
+                        r.Bonus = 2
+                    elif r.BonusRollCount > 10:
+                        r.Bonus = 1
+                    break
+                else:
+                    continue
+            except ValueError:
+                None
 def setting():
     print("setting open")
 
@@ -65,6 +77,7 @@ while running:
 
     elif current_page == 2:
         screen.fill((204,135,230))
+        screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
             menu()
