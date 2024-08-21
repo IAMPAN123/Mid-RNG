@@ -42,7 +42,7 @@ current_page = 1
 running = True
 while running:
     
-    screen.fill((202, 228, 241))
+    screen.fill((0, 0, 0))
 
     if current_page == 1:
 
