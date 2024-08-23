@@ -1,10 +1,14 @@
 #WIP
 import pygame
 
-gold = 0
+gold = 100
 
-def rollgold(ammount):
+def gaingold(ammount):
     global gold
     gold += ammount
 
-tinput = rollgold(int(input()))
+def purchase(ammount):
+    global gold
+    gold -= ammount
+
+#tinput = rollgold(int(input()))
