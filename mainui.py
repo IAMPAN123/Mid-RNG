@@ -9,32 +9,48 @@ pygame.font.init()
 
 #set up screen
 screen = pygame.display.set_mode((600,700))
-pygame.display.set_caption("Roll")
+pygame.display.set_caption("RNG")
 
 #set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
-gdisplay = mfont.render(f'Gold = {c.gold}', False, (0, 0, 0))
+gdisplay = mfont.render(f'Gold = {c.gold}', False, (250, 250, 250))
 
 #set up bg
-#background_image1 = pygame.image.load("")
-#background_image2 = pygame.image.load("")
+bg1 = pygame.image.load("Images/bg.png")
+bg1 = pygame.transform.scale(bg1,(600,700))
+
+#set up title
+title = pygame.image.load("Images/title.png").convert_alpha()
+
+#adjust size
+title_img = pygame.transform.scale(title, (250, 148)) 
+
+title_rect = title.get_rect()
+title_rect.center = (300, 150)
 
 #set up button
 start_img = pygame.image.load("Images/start.png").convert_alpha()
 exit_img = pygame.image.load("Images/exit.png").convert_alpha()
-menu_img = pygame.image.load("Images/menu.png").convert_alpha()
+backpack_img = pygame.image.load("Images/bp.png").convert_alpha()
 roll_img = pygame.image.load("Images/roll.png").convert_alpha()
-setting_img = pygame.image.load("Images/setting.png").convert_alpha()
+setting_img = pygame.image.load("Images/st.png").convert_alpha()
+instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
+cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 
 #create button instances
-start_button = button.Button(160, 250, start_img, width = 300, height = 150)
-exit_button = button.Button(20, 30, exit_img, width = 50, height = 50)
-backpack_button = button.Button(50, 500, menu_img, width = 150, height = 78)
-roll_button = button.Button(222, 496, roll_img, width = 150, height = 88)
-setting_button = button.Button(400, 504, setting_img, width = 150, height = 78)
+start_button = button.Button(300, 450, start_img, width = 450, height = 302)
+exit_button = button.Button(0, 0, exit_img, width = 300, height = 113)
+backpack_button = button.Button(100, 600, backpack_img, width= 100 , height= 95)
+roll_button = button.Button(300, 600, roll_img, width = 249, height = 95)
+setting_button = button.Button(500, 600, setting_img, width = 100, height = 95)
+instructions_button = button.Button(0, 0, instructions_img, width = 300, height = 115)
+cross_button = button.Button(0, 0, cross_img, width = 100, height = 95)
+
+#panel state
+settings_active = False
 
 #define function
-def menu():
+def backpack():
     print("beg open")
 
 def roll():
@@ -55,8 +71,35 @@ def roll():
                     continue
             except ValueError:
                 None
+
 def setting():
-    print("setting open")
+    #draw panel
+    panel_rect = pygame.Rect(100, 150, 400, 400)
+    pygame.draw.rect(screen, (250, 250, 250), panel_rect)
+    #button position
+    cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
+    instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
+    exit_button.rect.center = (panel_rect.x + 200, panel_rect.y + 300)
+
+    if cross_button.draw(screen):
+       return True
+    if instructions_button.draw(screen):
+        print("Show instructions")
+    if exit_button.draw(screen):
+        pygame.quit()
+        exit()
+
+    return False
+
+def fade_out(width, height):
+    fade = pygame.Surface((width, height))
+    fade.fill((0,0,0))
+
+    for alpha in range (0, 255):
+        fade.set_alpha(alpha)
+        screen.blit(fade,(0,0))
+        pygame.display.update()
+        pygame.time.delay(2)
 
 #page
 current_page = 1
@@ -65,26 +108,37 @@ current_page = 1
 running = True
 while running:
     
-    screen.fill((0, 0, 0))
+    screen.blit(bg1, (0, 0))
 
     if current_page == 1:
 
+        screen.blit(title, title_rect)
+
         if start_button.draw(screen):
-            print("Start")
-            current_page = 2
-        if exit_button.draw(screen):
-            running = False
+            fade_out(600,700)
+            current_page = 2 
 
     elif current_page == 2:
-        screen.fill((204,135,230))
+        screen.fill((0,0,0))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
-            menu()
+            backpack()
         if roll_button.draw(screen):
             roll()
         if setting_button.draw(screen):
-            setting()
+            settings_active = True
+
+    if settings_active:
+        #overlay main screen
+        overlay = pygame.Surface(screen.get_size())
+        overlay.fill((0, 0, 0))
+        overlay.set_alpha(150) 
+        screen.blit(overlay, (0, 0))
+       
+        if setting():
+            settings_active = False
+            cross_button.reset()
 
     #event handler
     for event in pygame.event.get():
