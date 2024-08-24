@@ -61,6 +61,7 @@ def roll():
                 Result = random.randint(1, int(ActualFinalChance))
                 if Result == 1:
                     print(x)
+                    c.gaingold(r.Rarity[x])
                     r.BonusRollCount += 1
                     if r.BonusRollCount == 10:
                         r.Bonus = 2

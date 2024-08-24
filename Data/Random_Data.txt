@@ -1,1 +1,1 @@
-{'Slot1': {'rarity': 'Rare', 'name': 'Gear'}}
+{}
