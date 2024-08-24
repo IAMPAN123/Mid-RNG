@@ -62,8 +62,6 @@ def roll_and_store(catalog, filename):
         else:
             print("New item discarded.")
 
-        # Hvnt code the part tht when it exceeds the 10th slot, it'll crash
-
 
 ### Main
 
