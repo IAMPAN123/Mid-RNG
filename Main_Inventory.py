@@ -48,8 +48,19 @@ def roll_and_store(catalog, filename):
         save_value(str(catalog), filename)
         print(f"Stored in {slot_name}. Current catalog: {catalog}")
     else:
-        print("New item discarded.")
-        # Hvnt code the part tht when it exceeds the 10th slot, it'll crash
+        # Slot is full, prompt asking user to whether discard or keep the new item, if keep then replace which one
+        user_input = input("All slots are full. Do you want to keep the new item? (yes/no) >> ").lower()
+        if user_input == 'yes':
+            slot_to_clear = input("Enter the slot number to overwrite (1-10) >> ")
+            slot_to_clear = f"Slot{slot_to_clear}"
+            if slot_to_clear in catalog:
+                catalog[slot_to_clear] = new_values
+                save_value(str(catalog), filename)
+                print(f"Stored in {slot_to_clear}. Current catalog: {catalog}")
+            else:
+                print("Invalid slot number.")
+        else:
+            print("New item discarded.")
 
 
 ### Main
