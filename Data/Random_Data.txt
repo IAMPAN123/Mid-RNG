@@ -1,1 +1,1 @@
-{'Slot1': {'rarity': 'Legendary', 'name': 'Gear'}, 'Slot2': {'rarity': 'Uncommon', 'name': 'Potion'}, 'Slot3': {'rarity': 'Uncommon', 'name': 'Aura'}, 'Slot4': {'rarity': 'Epic', 'name': 'Gear'}, 'Slot5': {'rarity': 'Legendary', 'name': 'Gear'}, 'Slot6': {'rarity': 'Uncommon', 'name': 'Potion'}, 'Slot7': {'rarity': 'Uncommon', 'name': 'Potion'}, 'Slot8': {'rarity': 'Common', 'name': 'Gear'}, 'Slot9': {'rarity': 'Uncommon', 'name': 'Gear'}, 'Slot10': {'rarity': 'Legendary', 'name': 'Gear'}}
+{}
