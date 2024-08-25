@@ -3,7 +3,7 @@ import pygame
 pygame.mixer.init()
 
 #load sound
-button_sound = pygame.mixer.Sound("clicks.mp3")
+button_sound = pygame.mixer.Sound("Audio/clicks.mp3")
 
 #Define
 class Button():
