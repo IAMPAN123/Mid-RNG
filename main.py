@@ -1,14 +1,16 @@
 import pygame
-import button
 import random
 import Rolling as r
 import Currency as c
+from button import Button
+from Game.inventory import Inventory
+from Game.roll import roll
+from Game.gui import draw_inventory
 
 pygame.init()
-pygame.font.init()
 
-#set up screen
-screen = pygame.display.set_mode((600,700))
+# Set up the screen
+screen = pygame.display.set_mode((600, 700))
 pygame.display.set_caption("RNG")
 
 #set up text and font
@@ -37,21 +39,21 @@ setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 
+
 #create button instances
-start_button = button.Button(300, 450, start_img, width = 450, height = 302)
-exit_button = button.Button(0, 0, exit_img, width = 300, height = 113)
-backpack_button = button.Button(100, 600, backpack_img, width= 100 , height= 95)
-roll_button = button.Button(300, 600, roll_img, width = 249, height = 95)
-setting_button = button.Button(500, 600, setting_img, width = 100, height = 95)
-instructions_button = button.Button(0, 0, instructions_img, width = 300, height = 115)
-cross_button = button.Button(0, 0, cross_img, width = 100, height = 95)
+start_button = Button(300, 450, start_img, width = 450, height = 302)
+exit_button = Button(0, 0, exit_img, width = 300, height = 113)
+backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
+roll_button = Button(300, 600, roll_img, width = 249, height = 95)
+setting_button = Button(500, 600, setting_img, width = 100, height = 95)
+instructions_button = Button(0, 0, instructions_img, width = 300, height = 115)
+cross_button = Button(0, 0, cross_img, width = 100, height = 95)
+
+# Initialize inventory
+inventory = Inventory(screen)
 
 #panel state
 settings_active = False
-
-#define function
-def backpack():
-    print("beg open")
 
 def roll():
     for x in r.Rarity:
@@ -100,35 +102,33 @@ def fade_out(width, height):
         fade.set_alpha(alpha)
         screen.blit(fade,(0,0))
         pygame.display.update()
-        pygame.time.delay(2)
+        pygame.time.delay(4)
 
-#page
-current_page = 1
-
-#main loop
+# Main loop
 running = True
+clock = pygame.time.Clock()
+
 while running:
-    
     screen.blit(bg1, (0, 0))
 
-    if current_page == 1:
-
+    if inventory.current_page == 1:
         screen.blit(title, title_rect)
-
         if start_button.draw(screen):
             fade_out(600,700)
-            current_page = 2 
-
-    elif current_page == 2:
+            inventory.current_page = 2
+        
+    elif inventory.current_page == 2:
         screen.fill((0,0,0))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
-            backpack()
+            inventory.open()
         if roll_button.draw(screen):
             roll()
         if setting_button.draw(screen):
             settings_active = True
+        if inventory.is_open:
+            draw_inventory(screen, inventory)
 
     if settings_active:
         #overlay main screen
@@ -141,12 +141,13 @@ while running:
             settings_active = False
             cross_button.reset()
 
-    #event handler
+    # Event handler
     for event in pygame.event.get():
-		#quit game
         if event.type == pygame.QUIT:
             running = False
-    
+        inventory.handle_event(event)
+
     pygame.display.update()
+    clock.tick(60)
 
 pygame.quit()
