@@ -1,7 +1,7 @@
 import pygame
 import random
 import Rolling as r
-import Currency as c
+import CurrencyAndUpgrades as c
 from button import Button
 from Game.inventory import Inventory
 from Game.roll import roll
