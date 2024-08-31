@@ -5,17 +5,25 @@ class Inventory:
     def __init__(self, screen):
         self.screen = screen
         self.inventory_width = 300
-        self.inventory_height = 350
-        self.inventory_position = ((600 - self.inventory_width) // 2, (700 - self.inventory_height) // 2)
+        self.inventory_height = 500
+        self.inventory_position = ((600 - self.inventory_width) // 2, (700 - self.inventory_height) // 3)
         self.font = pygame.font.SysFont(None, 36)
+        self.description_font = pygame.font.SysFont(None, 24)
         self.inventory_text = self.font.render('Inventory', True, (255, 255, 255))
-        self.slot_size = 32
-        self.padding = 10
+        self.slot_size = 50
+        self.padding = 5
         self.selected_slot = None
         self.animation_index = 0
         self.is_open = False
-        self.current_page = 1
+        self.current_page = 1  # Restored missing part
         self.close_button_rect = None
+        self.left_screen_width_ratio = 0.2  # Left screen width ratio
+        self.right_screen_width_ratio = 0.7  # Right screen width ratio
+
+        # Calculate the width of the left and right screens
+        self.left_screen_width = int(self.inventory_width * self.left_screen_width_ratio)
+        self.right_screen_width = int(self.inventory_width * self.right_screen_width_ratio)
+        self.screen_height = 100  # Fixed height for the left and right screens
 
         self.inventory_slots = self._create_slots()
         self.idle_frames = self._load_idle_frames()
@@ -29,7 +37,7 @@ class Inventory:
         
         # Calculate offsets to centralize the grid within the inventory window
         offset_x = (self.inventory_width - total_grid_width) // 2
-        offset_y = (self.inventory_height - total_grid_height) // 2
+        offset_y = (self.inventory_height - total_grid_height - self.screen_height - self.padding) // 2
 
         for row in range(5):
             for col in range(5):
@@ -79,7 +87,7 @@ class Inventory:
                 self.animation_index = 0
 
     def draw(self):
-        """Draw the inventory window, slots, text, and close button."""
+        """Draw the inventory window, slots, text, close button, and additional screens."""
         # Draw inventory background
         pygame.draw.rect(self.screen, (50, 50, 50), (*self.inventory_position, self.inventory_width, self.inventory_height))
 
@@ -102,3 +110,28 @@ class Inventory:
                 frame_index = (self.animation_index // self.animation_speed) % len(self.idle_frames)
                 frame = self.idle_frames[frame_index]
                 self.screen.blit(frame, (x, y))
+
+        # Draw the left screen (item image) inside the inventory window
+        left_screen_x = self.inventory_position[0] + self.padding
+        left_screen_y = self.inventory_position[1] + self.inventory_height - self.screen_height - self.padding
+        left_screen_rect = pygame.Rect(left_screen_x, left_screen_y, self.left_screen_width, self.screen_height)
+        pygame.draw.rect(self.screen, (70, 70, 70), left_screen_rect)
+
+        # Draw the right screen (item description) inside the inventory window
+        right_screen_x = left_screen_x + self.left_screen_width + self.padding
+        right_screen_y = left_screen_y
+        right_screen_rect = pygame.Rect(right_screen_x, right_screen_y, self.right_screen_width - self.padding, self.screen_height)
+        pygame.draw.rect(self.screen, (70, 70, 70), right_screen_rect)
+
+        # Display selected item image on the left screen
+        if self.selected_slot is not None:
+            # Placeholder image, replace with actual item image
+            item_image = self.idle_frames[0]  # Use the first frame as a placeholder
+            item_image = pygame.transform.scale(item_image, (self.left_screen_width - 20, self.screen_height - 20))
+            self.screen.blit(item_image, (left_screen_rect.x + 10, left_screen_rect.y + 10))
+
+            # Placeholder description, replace with actual item description
+            description_lines = ["Item Name: Placeholder", "Description:", "This is a placeholder item."]
+            for i, line in enumerate(description_lines):
+                description_text = self.description_font.render(line, True, (255, 255, 255))
+                self.screen.blit(description_text, (right_screen_rect.x + 10, right_screen_rect.y + 10 + i * 30))
