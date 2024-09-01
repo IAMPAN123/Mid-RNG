@@ -1,10 +1,10 @@
 import pygame
 import random
 import Rolling as r
-import CurrencyAndUpgrades as c
+import CurrencyAndUpgrades as cu
+import SliderExample as cd
 from button import Button
 from Game.inventory import Inventory
-from Game.roll import roll
 from Game.gui import draw_inventory
 
 pygame.init()
@@ -15,7 +15,8 @@ pygame.display.set_caption("RNG")
 
 #set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
-gdisplay = mfont.render(f'Gold = {c.gold}', False, (250, 250, 250))
+gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+cd.WhenChange(cu.gold)
 
 #set up bg
 bg1 = pygame.image.load("Images/bg.png")
@@ -38,7 +39,7 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-
+testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
 
 #create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
@@ -48,6 +49,7 @@ roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = Button(0, 0, instructions_img, width = 300, height = 115)
 cross_button = Button(0, 0, cross_img, width = 100, height = 95)
+testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 
 # Initialize inventory
 inventory = Inventory(screen)
@@ -63,7 +65,7 @@ def roll():
                 Result = random.randint(1, int(ActualFinalChance))
                 if Result == 1:
                     print(x)
-                    c.gaingold(r.Rarity[x])
+                    cu.gaingold(r.Rarity[x])
                     r.BonusRollCount += 1
                     if r.BonusRollCount == 10:
                         r.Bonus = 2
@@ -104,9 +106,14 @@ def fade_out(width, height):
         pygame.display.update()
         pygame.time.delay(4)
 
+def updategold():
+    screen.fill((0, 0, 0))
+    screen.blit(gdisplay, (10, 0))
+
 # Main loop
 running = True
 clock = pygame.time.Clock()
+LastTimeUpdate = pygame.time.get_ticks()
 
 while running:
     screen.blit(bg1, (0, 0))
@@ -129,6 +136,12 @@ while running:
             settings_active = True
         if inventory.is_open:
             draw_inventory(screen, inventory)
+        if testupg.draw(screen):
+            cu.purchase(100)
+            cu.totalupg += 1
+            cu.testupg += 1
+            cu.passivegain += 1
+        cd.WhenChange.DoThis(newval = cu.gold, func = updategold)
 
     if settings_active:
         #overlay main screen
@@ -140,6 +153,12 @@ while running:
         if setting():
             settings_active = False
             cross_button.reset()
+
+    CurrentTime = pygame.time.get_ticks()
+    if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
+        cu.gold += cu.passivegain
+        print(cu.gold)
+        LastTimeUpdate = CurrentTime
 
     # Event handler
     for event in pygame.event.get():

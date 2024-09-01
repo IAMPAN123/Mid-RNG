@@ -110,10 +110,6 @@ def fade_out(width, height):
 #update gold display
 LastTimeUpdate = pygame.time.get_ticks()
 
-def updategold():
-    screen.fill((0, 0, 0))
-    screen.blit(gdisplay, (10, 0))
-
 #page
 current_page = 1
 
@@ -133,6 +129,7 @@ while running:
 
     elif current_page == 2:
         screen.fill((0,0,0))
+        gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
@@ -144,7 +141,7 @@ while running:
         if testupg.draw(screen):
             cu.totalupg += 1
             cu.testupg += 1
-            cu.passivegain += 1    
+            cu.passivegain += 1
 
     if settings_active:
         #overlay main screen
@@ -158,9 +155,8 @@ while running:
             cross_button.reset()
 
     CurrentTime = pygame.time.get_ticks()
-    if cu.totalupg == True and CurrentTime - LastTimeUpdate >= 1000:
+    if cu.totalupg > 1 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
-        print(cu.gold)
         LastTimeUpdate = CurrentTime
 
     #event handler
@@ -170,6 +166,5 @@ while running:
             running = False
 
     pygame.display.update()
-    updategold()
 
 pygame.quit()
