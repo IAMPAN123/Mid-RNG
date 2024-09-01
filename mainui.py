@@ -72,6 +72,7 @@ def roll():
                         r.Bonus = 2
                     elif r.BonusRollCount > 10:
                         r.Bonus = 1
+                        r.BonusRollCount = 0
                     break
                 else:
                     continue
