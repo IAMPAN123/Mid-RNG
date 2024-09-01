@@ -42,12 +42,12 @@ cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 
 #create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
-exit_button = Button(0, 0, exit_img, width = 300, height = 113)
+exit_button = Button(0, 0, exit_img, width = 300, height = 113, effect_enabled = False)
 backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
 roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
-instructions_button = Button(0, 0, instructions_img, width = 300, height = 115)
-cross_button = Button(0, 0, cross_img, width = 100, height = 95)
+instructions_button = Button(0, 0, instructions_img, width = 300, height = 115, effect_enabled = False)
+cross_button = Button(0, 0, cross_img, width = 100, height = 95, effect_enabled = False)
 
 # Initialize inventory
 inventory = Inventory(screen)
@@ -76,9 +76,10 @@ def roll():
                 None
 
 def setting():
+    global settings_active
     #draw panel
     panel_rect = pygame.Rect(100, 150, 400, 400)
-    pygame.draw.rect(screen, (250, 250, 250), panel_rect)
+    pygame.draw.rect(screen, (211, 211, 211), panel_rect)
     #button position
     cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
     instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
@@ -139,7 +140,6 @@ while running:
        
         if setting():
             settings_active = False
-            cross_button.reset()
 
     # Event handler
     for event in pygame.event.get():
