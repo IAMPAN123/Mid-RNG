@@ -36,7 +36,7 @@ instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 
 
-#create button instances
+# Create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
 exit_button = Button(0, 0, exit_img, width = 300, height = 113, effect_enabled = False)
 backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
@@ -73,10 +73,10 @@ def roll():
 
 def setting():
     global settings_active
-    #Draw panel
+    # Draw panel
     panel_rect = pygame.Rect(100, 150, 400, 400)
     pygame.draw.rect(screen, (211, 211, 211), panel_rect)
-    #Button positions
+    # Button positions
     cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
     instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
     exit_button.rect.center = (panel_rect.x + 200, panel_rect.y + 300)
