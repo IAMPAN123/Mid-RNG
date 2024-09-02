@@ -1,10 +1,12 @@
 import pygame
 import random
 import Rolling as r
-import Currency as c
+import CurrencyAndUpgrades as cu
+import SliderExample as cd
 from button import Button
-from Game.inventory import Inventory  # Ensure correct import path
+from Game.inventory import Inventory
 from Game.roll import roll
+from Game.gui import draw_inventory
 
 pygame.init()
 
@@ -14,7 +16,7 @@ pygame.display.set_caption("RNG")
 
 # Set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
-gdisplay = mfont.render(f'Gold = {c.gold}', False, (250, 250, 250))
+gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
 
 # Set up background
 bg1 = pygame.image.load("Images/bg.png")
@@ -34,7 +36,7 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-
+testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
 
 # Create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
@@ -44,6 +46,7 @@ roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = Button(0, 0, instructions_img, width = 300, height = 115, effect_enabled = False)
 cross_button = Button(0, 0, cross_img, width = 100, height = 95, effect_enabled = False)
+testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 
 # Initialize inventory
 inventory = Inventory(screen)
@@ -53,23 +56,23 @@ settings_active = False
 
 def roll():
     for x in r.Rarity:
-        NotActualFinalChance = (r.FinalChance(1 / (r.Rarity[x]), r.Luck, r.Bonus))
-        ActualFinalChance = 1 / NotActualFinalChance
-        try:
-            Result = random.randint(1, int(ActualFinalChance))
-            if Result == 1:
-                print(x)
-                c.gaingold(r.Rarity[x])
-                r.BonusRollCount += 1
-                if r.BonusRollCount == 10:
-                    r.Bonus = 2
-                elif r.BonusRollCount > 10:
-                    r.Bonus = 1
-                break
-            else:
-                continue
-        except ValueError:
-            None
+            NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
+            ActualFinalChance = 1/NotActualFinalChance
+            try:
+                Result = random.randint(1, int(ActualFinalChance))
+                if Result == 1:
+                    print(x)
+                    cu.gaingold(r.Rarity[x])
+                    r.BonusRollCount += 1
+                    if r.BonusRollCount == 10:
+                        r.Bonus = 2
+                    elif r.BonusRollCount > 10:
+                        r.Bonus = 1
+                    break
+                else:
+                    continue
+            except ValueError:
+                None
 
 def setting():
     global settings_active
@@ -101,9 +104,14 @@ def fade_out(width, height):
         pygame.display.update()
         pygame.time.delay(4)
 
+def updategold():
+    screen.fill((0, 0, 0))
+    screen.blit(gdisplay, (10, 0))
+
 # Main loop
 running = True
 clock = pygame.time.Clock()
+LastTimeUpdate = pygame.time.get_ticks()
 
 while running:
     screen.blit(bg1, (0, 0))
@@ -116,6 +124,7 @@ while running:
         
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
+        gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
@@ -124,9 +133,13 @@ while running:
             roll()
         if setting_button.draw(screen):
             settings_active = True
+        if testupg.draw(screen):
+            cu.totalupg += 1
+            cu.testupg += 1
+            cu.passivegain += 1
 
         if inventory.is_open:
-            inventory.draw()  # Directly call the draw method of inventory
+            draw_inventory(screen, inventory)
 
     if settings_active:
         # Overlay main screen
@@ -137,6 +150,11 @@ while running:
        
         if setting():
             settings_active = False
+
+    CurrentTime = pygame.time.get_ticks()
+    if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
+        cu.gold += cu.passivegain
+        LastTimeUpdate = CurrentTime
 
     # Event handler
     for event in pygame.event.get():

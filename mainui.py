@@ -2,7 +2,7 @@ import pygame
 import button
 import random
 import Rolling as r
-import Currency as c
+import CurrencyAndUpgrades as cu
 
 pygame.init()
 pygame.font.init()
@@ -11,9 +11,12 @@ pygame.font.init()
 screen = pygame.display.set_mode((600,700))
 pygame.display.set_caption("RNG")
 
+#clock
+pygame.time.Clock()
+
 #set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
-gdisplay = mfont.render(f'Gold = {c.gold}', False, (250, 250, 250))
+gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
 
 #set up bg
 bg1 = pygame.image.load("Images/bg.png")
@@ -36,6 +39,7 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
+testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
 
 #create button instances
 start_button = button.Button(300, 450, start_img, width = 450, height = 302)
@@ -45,6 +49,7 @@ roll_button = button.Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = button.Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = button.Button(0, 0, instructions_img, width = 300, height = 115)
 cross_button = button.Button(0, 0, cross_img, width = 100, height = 95)
+testupg = button.Button(500, 50, testupgimg, width = 100, height = 50)
 
 #panel state
 settings_active = False
@@ -61,12 +66,13 @@ def roll():
                 Result = random.randint(1, int(ActualFinalChance))
                 if Result == 1:
                     print(x)
-                    c.gaingold(r.Rarity[x])
+                    cu.gaingold(r.Rarity[x])
                     r.BonusRollCount += 1
                     if r.BonusRollCount == 10:
                         r.Bonus = 2
                     elif r.BonusRollCount > 10:
                         r.Bonus = 1
+                        r.BonusRollCount = 0
                     break
                 else:
                     continue
@@ -102,6 +108,9 @@ def fade_out(width, height):
         pygame.display.update()
         pygame.time.delay(2)
 
+#update gold display
+LastTimeUpdate = pygame.time.get_ticks()
+
 #page
 current_page = 1
 
@@ -121,6 +130,7 @@ while running:
 
     elif current_page == 2:
         screen.fill((0,0,0))
+        gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
@@ -129,6 +139,10 @@ while running:
             roll()
         if setting_button.draw(screen):
             settings_active = True
+        if testupg.draw(screen):
+            cu.totalupg += 1
+            cu.testupg += 1
+            cu.passivegain += 1
 
     if settings_active:
         #overlay main screen
@@ -141,12 +155,17 @@ while running:
             settings_active = False
             cross_button.reset()
 
+    CurrentTime = pygame.time.get_ticks()
+    if cu.totalupg > 1 and CurrentTime - LastTimeUpdate >= 1000:
+        cu.gold += cu.passivegain
+        LastTimeUpdate = CurrentTime
+
     #event handler
     for event in pygame.event.get():
 		#quit game
         if event.type == pygame.QUIT:
             running = False
-    
+
     pygame.display.update()
 
 pygame.quit()
