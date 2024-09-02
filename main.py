@@ -5,6 +5,7 @@ import CurrencyAndUpgrades as cu
 import SliderExample as cd
 from button import Button
 from Game.inventory import Inventory
+from Game.roll import roll
 from Game.gui import draw_inventory
 
 pygame.init()
@@ -13,25 +14,22 @@ pygame.init()
 screen = pygame.display.set_mode((600, 700))
 pygame.display.set_caption("RNG")
 
-#set up text and font
+# Set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
 gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
 cd.WhenChange(cu.gold)
 
-#set up bg
+# Set up background
 bg1 = pygame.image.load("Images/bg.png")
-bg1 = pygame.transform.scale(bg1,(600,700))
+bg1 = pygame.transform.scale(bg1, (600, 700))
 
-#set up title
+# Set up title
 title = pygame.image.load("Images/title.png").convert_alpha()
-
-#adjust size
 title_img = pygame.transform.scale(title, (250, 148)) 
-
 title_rect = title.get_rect()
 title_rect.center = (300, 150)
 
-#set up button
+# Set up buttons
 start_img = pygame.image.load("Images/start.png").convert_alpha()
 exit_img = pygame.image.load("Images/exit.png").convert_alpha()
 backpack_img = pygame.image.load("Images/bp.png").convert_alpha()
@@ -39,7 +37,7 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
+
 
 #create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
@@ -49,12 +47,11 @@ roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = Button(0, 0, instructions_img, width = 300, height = 115)
 cross_button = Button(0, 0, cross_img, width = 100, height = 95)
-testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 
 # Initialize inventory
 inventory = Inventory(screen)
 
-#panel state
+# Panel state
 settings_active = False
 
 def roll():
@@ -78,16 +75,17 @@ def roll():
                 None
 
 def setting():
-    #draw panel
+    # Draw panel
     panel_rect = pygame.Rect(100, 150, 400, 400)
     pygame.draw.rect(screen, (250, 250, 250), panel_rect)
-    #button position
+
+    # Button positions
     cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
     instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
     exit_button.rect.center = (panel_rect.x + 200, panel_rect.y + 300)
 
     if cross_button.draw(screen):
-       return True
+        return True
     if instructions_button.draw(screen):
         print("Show instructions")
     if exit_button.draw(screen):
@@ -98,11 +96,11 @@ def setting():
 
 def fade_out(width, height):
     fade = pygame.Surface((width, height))
-    fade.fill((0,0,0))
+    fade.fill((0, 0, 0))
 
-    for alpha in range (0, 255):
+    for alpha in range(0, 255):
         fade.set_alpha(alpha)
-        screen.blit(fade,(0,0))
+        screen.blit(fade, (0, 0))
         pygame.display.update()
         pygame.time.delay(4)
 
@@ -121,11 +119,11 @@ while running:
     if inventory.current_page == 1:
         screen.blit(title, title_rect)
         if start_button.draw(screen):
-            fade_out(600,700)
+            fade_out(600, 700)
             inventory.current_page = 2
         
     elif inventory.current_page == 2:
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
@@ -134,17 +132,12 @@ while running:
             roll()
         if setting_button.draw(screen):
             settings_active = True
+
         if inventory.is_open:
             draw_inventory(screen, inventory)
-        if testupg.draw(screen):
-            cu.purchase(100)
-            cu.totalupg += 1
-            cu.testupg += 1
-            cu.passivegain += 1
-        cd.WhenChange.DoThis(newval = cu.gold, func = updategold)
 
     if settings_active:
-        #overlay main screen
+        # Overlay main screen
         overlay = pygame.Surface(screen.get_size())
         overlay.fill((0, 0, 0))
         overlay.set_alpha(150) 

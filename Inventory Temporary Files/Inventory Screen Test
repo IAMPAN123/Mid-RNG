@@ -13,7 +13,7 @@ pygame.display.set_caption("Roll")
 # Load button images
 start_img = pygame.image.load("Images/start.png").convert_alpha()
 exit_img = pygame.image.load("Images/exit.png").convert_alpha()
-menu_img = pygame.image.load("Images/menu.png").convert_alpha()
+menu_img = pygame.image.load("Images/st.png").convert_alpha()
 roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/setting.png").convert_alpha()
 
