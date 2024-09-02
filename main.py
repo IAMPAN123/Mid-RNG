@@ -17,7 +17,6 @@ pygame.display.set_caption("RNG")
 # Set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
 gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
-cd.WhenChange(cu.gold)
 
 # Set up background
 bg1 = pygame.image.load("Images/bg.png")
@@ -37,16 +36,17 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
+testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
 
-
-#create button instances
+# Create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
-exit_button = Button(0, 0, exit_img, width = 300, height = 113)
+exit_button = Button(0, 0, exit_img, width = 300, height = 113, effect_enabled = False)
 backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
 roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
-instructions_button = Button(0, 0, instructions_img, width = 300, height = 115)
-cross_button = Button(0, 0, cross_img, width = 100, height = 95)
+instructions_button = Button(0, 0, instructions_img, width = 300, height = 115, effect_enabled = False)
+cross_button = Button(0, 0, cross_img, width = 100, height = 95, effect_enabled = False)
+testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 
 # Initialize inventory
 inventory = Inventory(screen)
@@ -75,10 +75,10 @@ def roll():
                 None
 
 def setting():
+    global settings_active
     # Draw panel
     panel_rect = pygame.Rect(100, 150, 400, 400)
-    pygame.draw.rect(screen, (250, 250, 250), panel_rect)
-
+    pygame.draw.rect(screen, (211, 211, 211), panel_rect)
     # Button positions
     cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
     instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
@@ -124,6 +124,7 @@ while running:
         
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
+        gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
 
         if backpack_button.draw(screen):
@@ -132,6 +133,10 @@ while running:
             roll()
         if setting_button.draw(screen):
             settings_active = True
+        if testupg.draw(screen):
+            cu.totalupg += 1
+            cu.testupg += 1
+            cu.passivegain += 1
 
         if inventory.is_open:
             draw_inventory(screen, inventory)
@@ -145,12 +150,10 @@ while running:
        
         if setting():
             settings_active = False
-            cross_button.reset()
 
     CurrentTime = pygame.time.get_ticks()
     if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
-        print(cu.gold)
         LastTimeUpdate = CurrentTime
 
     # Event handler
