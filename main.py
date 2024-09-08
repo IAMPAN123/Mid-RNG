@@ -6,7 +6,7 @@ import SliderExample as cd
 from button import Button
 from Game.inventory import Inventory
 from Game.roll import roll
-from Game.gui import draw_inventory
+from Game.gui import draw_inventory  # Check that draw_inventory is not conflicting with inventory.draw
 from roll_animation import Animation
 
 pygame.init()
@@ -214,8 +214,10 @@ while running:
             cu.testupg += 1
             cu.passivegain += 1
 
+        # Check if inventory is open and draw the inventory if it is
         if inventory.is_open:
-            draw_inventory(screen, inventory)
+            inventory.update_animation()  # Call this every frame to update animation
+            inventory.draw()  # Call the draw method for the inventory
 
     if settings_active:
         # Overlay main screen

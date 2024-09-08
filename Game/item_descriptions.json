@@ -1,0 +1,102 @@
+{
+    "0": {
+        "name": "Common Item",
+        "description": "A basic common item."
+    },
+    "1": {
+        "name": "Uncommon Item",
+        "description": "A slightly better item."
+    },
+    "2": {
+        "name": "Rare Item",
+        "description": "A rare and valuable item."
+    },
+    "3": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "4": {
+        "name": "Mid Item",
+        "description": "It is said to have the Dev's Power."
+    },
+    "5": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "6": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "7": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "8": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "9": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "10": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "11": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "12": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "13": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "14": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "15": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "16": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "17": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "18": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "19": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "20": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "21": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "22": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "23": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    },
+    "24": {
+        "name": "Legendary Item",
+        "description": "A legendary item of immense value."
+    }
+}

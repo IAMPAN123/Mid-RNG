@@ -18,3 +18,4 @@ class SpriteSheet:
         image.set_colorkey(color)
 
         return image
+    
