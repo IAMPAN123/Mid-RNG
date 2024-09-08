@@ -152,10 +152,9 @@ def instruction():
     font = pygame.font.SysFont("Comic Sans MS", 20)
     instruction_text = [
         "Welcome to the RNG Game!",
-        "1. Click 'Start' to begin.",
-        "2. Roll to get random items.",
-        "3. Upgrade your skills to earn more gold.",
-        "4. Manage your inventory wisely."
+        "1. Roll to get random items.",
+        "2. Upgrade your skills to earn more gold.",
+        "3. Manage your inventory wisely."
     ]
     
     # Draw
@@ -219,6 +218,13 @@ while running:
             inventory.update_animation()  # Call this every frame to update animation
             inventory.draw()  # Call the draw method for the inventory
 
+    # Update and draw the current animation
+    if current_animation:
+        current_animation.update()
+        current_animation.draw(screen)
+        if current_animation.finished:
+            current_animation = None
+
     if settings_active:
         # Overlay main screen
         overlay = pygame.Surface(screen.get_size())
@@ -233,13 +239,6 @@ while running:
     if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
         LastTimeUpdate = CurrentTime
-
-  # Update and draw the current animation
-    if current_animation:
-        current_animation.update()
-        current_animation.draw(screen)
-        if current_animation.finished:
-            current_animation = None
 
     # Event handler
     for event in pygame.event.get():
