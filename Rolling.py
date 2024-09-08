@@ -20,7 +20,33 @@ elif BonusRollCount > 10:
 #else:
 #    Bonus = 1
 #Item rarity
-Rarity = {'Mid' : 15, 'Legendary' : 10, 'Epic' : 8, 'Rare' : 4, 'Uncommon' : 2, 'Common' : 1}
+Rarity = {
+    'lim'                   : 100000000,
+    'Malevolent'            : 75000000,
+    'Nah'                   : 50000000,
+    'Deer'                  : 25000000,
+    'freaky'                : 10000000,
+    'Sigma'                 : 5000000,
+    'Mango'                 : 3000000,
+    'Fire'                  : 1000000,
+    'The Rock'              : 850000,
+    'Cat'                   : 600000,
+    'Banana'                : 500000,
+    'M1911'                 : 250000,
+    'Mid'                   : 100000,
+    'Exotic'                : 50000, 
+    'Paiten'                : 10000, 
+    'WickedSuperiorLegend'  : 1000, 
+    'Balls'                 : 100, 
+    'Orange'                : 50, 
+    'Crazy'                 : 30, 
+    'Mythic'                : 15, 
+    'Legendary'             : 10, 
+    'Epic'                  : 8, 
+    'Rare'                  : 4, 
+    'Uncommon'              : 2, 
+    'Common'                : 1
+          }
 #Rolling Calulation
 def FinalChance(Chance, Luck, Bonus):
     RollChance = Chance*((Luck*Bonus))

@@ -3,9 +3,9 @@ import random
 #Luck variables
 Base = 1
 UpgradeLuck = 1
-EquipmentLuck = 0
-MinigameLuck = 0
-PotionLuck = 0
+EquipmentLuck = 1
+MinigameLuck = 1
+PotionLuck = 1
 Bonus = 1
 BonusRollCount = 0
 #Luck Calulation
