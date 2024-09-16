@@ -35,11 +35,10 @@ inventory = Inventory(screen=None)  # Assuming you're handling screen elsewhere
 
 # Item rarity
 Rarity = {
-    'item0': 15, 'item1': 15, 'item2': 15, 'item3': 15, 'item4': 15,
-    'item5': 10, 'item6': 10, 'item7': 10, 'item8': 10, 'item9': 10,
+    'Common': 1, 'Uncommon': 2, 'Rare': 4, 'Epic': 8, 'Legendary': 10,
+    'Mythic': 15, 'item6': 10, 'item7': 10, 'item8': 10, 'item9': 10,
     'item10': 8, 'item11': 8, 'item12': 8, 'item13': 8, 'item14': 8,
-    'item15': 4, 'item16': 4, 'item17': 4, 'item18': 4, 'item19': 4,
-    'item20': 2, 'item21': 2, 'item22': 2, 'item23': 2, 'item24': 2
+    'item15': 4, 'item16': 4, 'item17': 4, 'item18': 4, 'Malevolent': 100000000,
 }
 
 # Rolling Calculation

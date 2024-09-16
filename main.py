@@ -108,24 +108,8 @@ def roll():
                         inventory.save_item_counts()
 
                      # Set the animation based on rarity
-                    if x == 'Common':
-                        current_animation = animations['Common']
-                        current_animation.reset()
-                    elif x == 'Uncommon':
-                        current_animation = animations['Uncommon']
-                        current_animation.reset()
-                    elif x == 'Rare':
-                        current_animation = animations['Rare']
-                        current_animation.reset()
-                    elif x == 'Epic':
-                        current_animation = animations['Epic']
-                        current_animation.reset()
-                    elif x == 'Legendary':
-                        current_animation = animations['Legendary']
-                        current_animation.reset()
-                    elif x == 'Mid':
-                        current_animation = animations['Mid']
-                        current_animation.reset()
+                    current_animation = animations[x]
+                    current_animation.reset()
 
                     break
                 else:
