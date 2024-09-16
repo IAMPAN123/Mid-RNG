@@ -98,5 +98,30 @@
     "24": {
         "name": "Legendary Item",
         "description": "Placeholder 25."
+    },
+    "25": {
+        "name": "Equipment0",
+        "description": "Placeholder 26.",
+        "ways_to_obtain": "2 common + 2 uncommon"
+    },
+    "26": {
+        "name": "Equipment1",
+        "description": "Placeholder 27.",
+        "ways_to_obtain": "2 uncommon + 2 rare"
+    },
+    "27": {
+        "name": "Equipment2",
+        "description": "Placeholder 28.",
+        "ways_to_obtain": "2 rare + 2 epic"
+    },
+    "28": {
+        "name": "Equipment3",
+        "description": "Placeholder 29.",
+        "ways-to_obtain": "2 epic + 2 legendary"
+    },
+    "29": {
+        "name": "Equipment4",
+        "description": "Placeholder 30.",
+        "ways_to_obtain": "2 legendary + 2 mid"
     }
 }
