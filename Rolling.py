@@ -21,11 +21,11 @@ elif BonusRollCount > 10:
 #    Bonus = 1
 #Item rarity
 Rarity = {
-    'lim'                   : 100000000,
-    'Malevolent'            : 75000000,
+    'Malevolent'            : 100000000,
+    'ph'            : 75000000,
     'Nah'                   : 50000000,
     'Deer'                  : 25000000,
-    'freaky'                : 10000000,
+    'FreakyWille'           : 10000000,
     'Sigma'                 : 5000000,
     'Mango'                 : 3000000,
     'Fire'                  : 1000000,
