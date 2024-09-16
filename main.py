@@ -1,19 +1,25 @@
 import pygame
 import random
-import Rolling as r
 import CurrencyAndUpgrades as cu
 import SliderExample as cd
 from button import Button
 from Game.inventory import Inventory
-from Game.roll import roll
 from Game.gui import draw_inventory  # Check that draw_inventory is not conflicting with inventory.draw
+from Game.equipment import Equipment
 from roll_animation import Animation
 
+import json
+# Load item-to-slot mapping from JSON
+with open('Game/item_to_slot_count.json', 'r') as file:
+    item_to_slot_count = json.load(file)
 pygame.init()
 
 # Set up the screen
 screen = pygame.display.set_mode((600, 700))
+pygame.font.init()
 pygame.display.set_caption("RNG")
+
+import Rolling as r
 
 # Load background music
 pygame.mixer.music.load('Audio/bgm.mp3')
@@ -42,6 +48,7 @@ setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 testupgimg = pygame.image.load("Images/placeholder.png").convert_alpha()
+equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
 return_img = pygame.image.load("Images/return.png").convert_alpha()
 mute_img = pygame.image.load("Images/mute.png").convert_alpha()
 open_img = pygame.image.load("Images/opsound.png").convert_alpha()
@@ -58,6 +65,7 @@ setting_button = Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = Button(0, 0, instructions_img, width = 250, height = 96, effect_enabled = False)
 cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled = False)
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
+equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
 mute_button = Button(0, 0, mute_img, width = 72, height = 76)
 open_button = Button(0, 0, open_img, width = 75, height = 82)
@@ -86,8 +94,9 @@ animations = {
     'Mid': Animation(mid_paths, (450, 253), (75, 75)),
 }
 
-# Initialize inventory
+# Initialize inventory and equipment
 inventory = Inventory(screen)
+equipment = Equipment(screen) 
 
 # Panel state
 settings_active = False
@@ -113,6 +122,11 @@ def roll():
                         r.Bonus = 2
                     elif r.BonusRollCount > 10:
                         r.Bonus = 1
+                    
+                    # Increment the counter for the rolled item
+                    if x in item_to_slot_count:
+                        inventory.increment_counter(x)
+                        inventory.save_item_counts()
 
                      # Set the animation based on rarity
                     current_animation = animations[x]
@@ -207,9 +221,10 @@ def updategold():
     screen.blit(gdisplay, (10, 0))
 
 def update_and_draw_inventory():
+    # Check if inventory is open and draw the inventory if it is
     if inventory.is_open:
-        inventory.update_animation()  # Update inventory animation
-        inventory.draw() 
+        inventory.update_animation()  # Call this to update any ongoing animations
+        inventory.draw()  # Ensure inventory is drawn when open
 
 # Main loop
 running = True
@@ -224,7 +239,7 @@ while running:
         if start_button.draw(screen):
             fade_out(600, 700)
             inventory.current_page = 2
-        
+            
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
         gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
@@ -232,6 +247,18 @@ while running:
 
         if backpack_button.draw(screen):
             inventory.open()
+        
+        if equipment_button.draw(screen):
+            equipment.open()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if inventory.is_open:  # Only handle inventory events if it's open
+                inventory.handle_event(event)
+            if equipment.is_open:
+                equipment.handle_event(event)
+
         if roll_button.draw(screen):
             roll()
         if setting_button.draw(screen):
@@ -243,6 +270,10 @@ while running:
 
         update_and_draw_inventory()
 
+        # Equipment screen handling
+        if equipment.is_open:
+            equipment.draw()  # Draw equipment screen
+            
     # Update and draw the current animation
     if current_animation:
         current_animation.update()
@@ -274,8 +305,8 @@ while running:
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-        inventory.handle_event(event)
+            inventory.save_item_counts()
+            running = False        
 
     pygame.display.update()
     clock.tick(60)
