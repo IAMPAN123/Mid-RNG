@@ -5,6 +5,7 @@ pygame.display.init()
 pygame.mixer.init()
 
 Score = 0
+KeyPressed = False
 Selected = 'white'
 Unselected = 'gray'
 ButtonStates = {True : Selected, False : Unselected}
@@ -34,9 +35,9 @@ class printslider:
         self.app.scrn.fill("black")
         slider = self.sliders[slidernum]
         if slider.button_rect.collidepoint(mouse_pos):
-            if mouse[0]:
+            if mouse[0] or KeyPressed:
                 slider.grabbed = True
-        if not mouse[0]:
+        if not (mouse[0] or KeyPressed):
             slider.grabbed = False
         if slider.button_rect.collidepoint(mouse_pos):  
             slider.hover()
@@ -81,7 +82,7 @@ class Circle():
         #check mouseover and clicked conditions
         if self.rect.collidepoint(pos)and self.mask.get_at((pos[0] - self.rect.x, pos[1] - self.rect.y)):
 
-            if (pygame.mouse.get_pressed()[0] == 1 or pygame.key.get_pressed() == True) and self.clicked == False:
+            if (pygame.mouse.get_pressed()[0] == 1 or KeyPressed == True) and self.clicked == False:
                 self.clicked = True
 
                 if self.effect_enabled:
@@ -117,7 +118,7 @@ class Circle():
 
                 action = True
         
-            elif (pygame.mouse.get_pressed()[0] == 0 or pygame.key.get_pressed() == False) and self.clicked == True:
+            elif (pygame.mouse.get_pressed()[0] == 0 or KeyPressed == False) and self.clicked == True:
                 self.clicked = False
                 self.reset_effects()
 
@@ -225,6 +226,7 @@ class minigame1:
 
     def run(self):
         global Score
+        global KeyPressed
         self.scrnstate = 'cir1'
         self.running = True
         while self.running:
@@ -413,6 +415,10 @@ class minigame1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.KEYDOWN:
+                    KeyPressed = True
+                if event.type == pygame.KEYUP:
+                    KeyPressed = False
 
             #print(Score)
             pygame.display.update()
