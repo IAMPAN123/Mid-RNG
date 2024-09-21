@@ -21,6 +21,10 @@ pygame.display.set_caption("RNG")
 
 import Rolling as r
 
+# Load background music
+pygame.mixer.music.load('Audio/bgm.mp3')
+pygame.mixer.music.play(-1)
+
 # Set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
 nfont = pygame.font.SysFont("Comic Sans MS", 20)
@@ -45,22 +49,35 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-testupgimg = pygame.image.load('Images/placeholder.png').convert_alpha()
+testupgimg = pygame.image.load("Images/placeholder.png").convert_alpha()
 equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
-return_img = pygame.image.load('Images/return.png').convert_alpha()
+return_img = pygame.image.load("Images/return.png").convert_alpha()
+mute_img = pygame.image.load("Images/mute.png").convert_alpha()
+open_img = pygame.image.load("Images/opsound.png").convert_alpha()
+increase_img = pygame.image.load("Images/icsound.png").convert_alpha()
+decrease_img = pygame.image.load("Images/dcsound.png").convert_alpha()
+
 
 # Create button instances
 start_button = Button(300, 450, start_img, width = 450, height = 302)
-exit_button = Button(0, 0, exit_img, width = 300, height = 113, effect_enabled = False)
+exit_button = Button(0, 0, exit_img, width = 250, height = 94, effect_enabled = False)
 backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
 roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
-instructions_button = Button(0, 0, instructions_img, width = 300, height = 115, effect_enabled = False)
-cross_button = Button(0, 0, cross_img, width = 100, height = 95, effect_enabled = False)
+instructions_button = Button(0, 0, instructions_img, width = 250, height = 96, effect_enabled = False)
+cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled = False)
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
 minigame_button = Button(100, 600, testupgimg, width = 100, height = 100)
+mute_button = Button(0, 0, mute_img, width = 72, height = 76)
+open_button = Button(0, 0, open_img, width = 75, height = 82)
+ic_button = Button(0, 0, increase_img, width = 70, height = 79)
+dc_button = Button(0, 0, decrease_img, width = 75, height = 75)
+
+# Define initial volume
+volume = 0.5  
+pygame.mixer.music.set_volume(volume)
 
 # Define animation paths
 common_paths = [f'Images/common pic/common_br_{i:03}.png' for i in range(34)]
@@ -72,12 +89,12 @@ mid_paths = [f'Images/mid pic/mid_br_{i:03}.png' for i in range(34)]
 
 # Create animation instances
 animations = {
-    'Common': Animation(common_paths, (450, 300), (75, 150)),
-    'Uncommon': Animation(uncommon_paths, (450, 300), (75, 150)),
-    'Rare': Animation(rare_paths, (450, 300), (75, 150)),
-    'Epic': Animation(epic_paths, (450, 300), (75, 150)),
-    'Legendary': Animation(legendary_paths, (450, 300), (75, 150)),
-    'Mid': Animation(mid_paths, (450, 290), (75, 140)),
+    'Common': Animation(common_paths, (450, 253), (75, 75)),
+    'Uncommon': Animation(uncommon_paths, (450, 253), (75, 75)),
+    'Rare': Animation(rare_paths, (450, 253), (75, 75)),
+    'Epic': Animation(epic_paths, (450, 253), (75, 75)),
+    'Legendary': Animation(legendary_paths, (450, 253), (75, 75)),
+    'Mid': Animation(mid_paths, (450, 253), (75, 75)),
 }
 
 # Initialize inventory and equipment
@@ -88,6 +105,10 @@ equipment = Equipment(screen)
 settings_active = False
 instruction_active = False
 current_animation = None
+
+# Load custom mouse cursor image
+cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
+pygame.mouse.set_visible(False)  # Hide default mouse cursor
 
 def roll():
     global current_animation
@@ -121,7 +142,7 @@ def roll():
                 None
 
 def setting():
-    global settings_active,instruction_active
+    global settings_active,instruction_active, volume
     if instruction_active:
         instruction()
     else:
@@ -130,9 +151,13 @@ def setting():
         pygame.draw.rect(screen, (211, 211, 211), panel_rect)
 
         # Button position
-        cross_button.rect.center = (panel_rect.x + 350, panel_rect.y + 50)
-        instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 150)
-        exit_button.rect.center = (panel_rect.x + 200, panel_rect.y + 300)
+        cross_button.rect.center = (panel_rect.x + 355, panel_rect.y + 45)
+        instructions_button.rect.center = (panel_rect.x + 200, panel_rect.y + 200)
+        exit_button.rect.center = (panel_rect.x + 200, panel_rect.y + 320)
+        mute_button.rect.center = (panel_rect.x + 230, panel_rect.y + 105)
+        open_button.rect.center = (panel_rect.x + 295, panel_rect.y + 105)
+        ic_button.rect.center = (panel_rect.x + 165, panel_rect.y + 107)
+        dc_button.rect.center = (panel_rect.x + 100, panel_rect.y + 100)
 
         if cross_button.draw(screen):
             settings_active = False
@@ -141,6 +166,20 @@ def setting():
         if exit_button.draw(screen):
             pygame.quit()
             exit()
+
+        if mute_button.draw(screen):
+            volume = 0 
+            pygame.mixer.music.set_volume(volume)
+        if open_button.draw(screen):
+            volume = 0.5
+            pygame.mixer.music.set_volume(volume)
+        if ic_button.draw(screen):
+            volume = min(1.0, volume + 0.1)
+            pygame.mixer.music.set_volume(volume)
+        if dc_button.draw(screen):
+            volume = max(0.0, volume - 0.1)
+            pygame.mixer.music.set_volume(volume)
+        
     return False
 
 def instruction():
@@ -160,7 +199,7 @@ def instruction():
     
     # Draw
     for i, line in enumerate(instruction_text):
-        text_surface = font.render(line, True, (0, 0, 0))  # 黑色文本
+        text_surface = font.render(line, True, (0, 0, 0)) 
         screen.blit(text_surface, (panel_rect.x + 20, panel_rect.y + 20 + i * 40))
 
     return_button.rect.center = (panel_rect.x + 400, panel_rect.y + 400)
@@ -183,6 +222,12 @@ def fade_out(width, height):
 def updategold():
     screen.fill((0, 0, 0))
     screen.blit(gdisplay, (10, 0))
+
+def update_and_draw_inventory():
+    # Check if inventory is open and draw the inventory if it is
+    if inventory.is_open:
+        inventory.update_animation()  # Call this to update any ongoing animations
+        inventory.draw()  # Ensure inventory is drawn when open
 
 # Main loop
 running = True
@@ -237,10 +282,7 @@ while running:
             pygame.mouse.set_visible(False)
             game.run(screen)
 
-        # Check if inventory is open and draw the inventory if it is
-        if inventory.is_open:
-            inventory.update_animation()  # Call this to update any ongoing animations
-            inventory.draw()  # Ensure inventory is drawn when open
+        update_and_draw_inventory()
 
         # Equipment screen handling
         if equipment.is_open:
@@ -252,6 +294,8 @@ while running:
         current_animation.draw(screen)
         if current_animation.finished:
             current_animation = None
+
+        update_and_draw_inventory()
 
     if settings_active:
         # Overlay main screen
@@ -267,6 +311,10 @@ while running:
     if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
         LastTimeUpdate = CurrentTime
+
+    # Draw custom mouse cursor
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    screen.blit(cursor_image, (mouse_x, mouse_y))
 
     # Event handler
     for event in pygame.event.get():
