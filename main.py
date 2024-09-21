@@ -1,7 +1,7 @@
 import pygame
 import random
 import CurrencyAndUpgrades as cu
-import SliderExample as cd
+import Minigame1 as mini
 from button import Button
 from Game.inventory import Inventory
 from Game.gui import draw_inventory  # Check that draw_inventory is not conflicting with inventory.draw
@@ -23,7 +23,9 @@ import Rolling as r
 
 # Set up text and font
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
+nfont = pygame.font.SysFont("Comic Sans MS", 20)
 gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
 
 # Set up background
 bg1 = pygame.image.load("Images/bg.png")
@@ -58,6 +60,7 @@ cross_button = Button(0, 0, cross_img, width = 100, height = 95, effect_enabled 
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
+minigame_button = Button(100, 600, testupgimg, width = 100, height = 100)
 
 # Define animation paths
 common_paths = [f'Images/common pic/common_br_{i:03}.png' for i in range(34)]
@@ -88,7 +91,7 @@ current_animation = None
 
 def roll():
     global current_animation
-    for x in r.Rarity:
+    for x in reversed(r.Rarity):
             NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
             ActualFinalChance = 1/NotActualFinalChance
             try:
@@ -183,11 +186,13 @@ def updategold():
 
 # Main loop
 running = True
+game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
 
 while running:
     screen.blit(bg1, (0, 0))
+    pygame.mouse.set_visible(True)
 
     if inventory.current_page == 1:
         screen.blit(title, title_rect)
@@ -198,7 +203,9 @@ while running:
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
         gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+        ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
+        screen.blit(ucost, (450, 70))
 
         if backpack_button.draw(screen):
             inventory.open()
@@ -219,9 +226,16 @@ while running:
         if setting_button.draw(screen):
             settings_active = True
         if testupg.draw(screen):
-            cu.totalupg += 1
-            cu.testupg += 1
-            cu.passivegain += 1
+            if cu.gold < 100 * (1 + cu.totalupg):
+                pass
+            else:
+                cu.purchase(100 * (1 + cu.totalupg))
+                cu.totalupg += 1
+                cu.passivegain += 1
+                r.Luck += 0.1
+        if minigame_button.draw(screen):
+            pygame.mouse.set_visible(False)
+            game.run(screen)
 
         # Check if inventory is open and draw the inventory if it is
         if inventory.is_open:

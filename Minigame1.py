@@ -16,9 +16,9 @@ ButtonStates = {True : Selected, False : Unselected}
 class sysui:
     @staticmethod
     def init(app):
-        sysui.center = (app.scrn.get_size()[0]//2, app.scrn.get_size()[1]//2)
-        sysui.half_width = app.scrn.get_size()[0]//2
-        sysui.half_height = app.scrn.get_size()[1]//2
+        sysui.center = (app.screen.get_size()[0]//2, app.screen.get_size()[1]//2)
+        sysui.half_width = app.screen.get_size()[0]//2
+        sysui.half_height = app.screen.get_size()[1]//2
 
 #beatmap
 class printslider:
@@ -26,13 +26,13 @@ class printslider:
         self.app = app
         self.bg = bg
 
-        self.sliders = [slider(sysui.center, (200,60), 0.5, 0, 100), slider((300,600), (400,60), 0.5, 0, 100)]
+        self.sliders = [slider((300,400), (200,60), 0.5, 0, 100), slider((300,600), (400,60), 0.5, 0, 100)]
 
     def run(self, slidernum):
         mouse_pos = pygame.mouse.get_pos()
         mouse = pygame.mouse.get_pressed()
 
-        self.app.scrn.fill("black")
+        self.app.fill("black")
         slider = self.sliders[slidernum]
         if slider.button_rect.collidepoint(mouse_pos):
             if mouse[0] or KeyPressed:
@@ -170,8 +170,8 @@ class slider:
         self.hovered = True
 
     def render(self, app):
-        pygame.draw.rect(app.scrn, "darkgray", self.container_rect, 2, 26)
-        pygame.draw.rect(app.scrn, ButtonStates[self.hovered], self.button_rect, 1, 26)
+        pygame.draw.rect(app, "darkgray", self.container_rect, 2, 26)
+        pygame.draw.rect(app, ButtonStates[self.hovered], self.button_rect, 1, 26)
 
     def get_value(self):
         val_range = self.slider_right_pos - self.slider_left_pos - (self.size[1]/2)
@@ -184,18 +184,18 @@ class slider:
 
 #mainloop
 class minigame1:
-    def __init__(self):
-        pygame.init()
-        self.scrn = pygame.display.set_mode((600,700))
-        sysui.init(self)
-        pygame.display.set_caption("minigame1")
-        pygame.mouse.set_visible(False)
+    def __init__(self, screen):
+        #pygame.init()
+        #screen = pygame.display.set_mode((600,700))
+        #sysui.init(screen)
+        #pygame.display.set_caption("minigame1")
+        #pygame.mouse.set_visible(False)
         self.clock = pygame.time.Clock()
         self.cursor = pygame.image.load('Images/cursor.png').convert_alpha()
         self.cursor = pygame.transform.scale(self.cursor, (50,50))
         self.halfcursorwidth = self.cursor.get_width()/2
         self.halfcursorheight = self.cursor.get_height()/2
-        self.ps = printslider(self)
+        self.ps = printslider(screen)
         self.circleimg = pygame.image.load('Images/hitcircle.png').convert_alpha()
         self.cir1 = Circle(470, 75, self.circleimg, width = 50, height = 50)
         self.cir2 = Circle(520, 110, self.circleimg, width = 50, height = 50)
@@ -222,182 +222,182 @@ class minigame1:
         self.cir23 = Circle(520, 110, self.circleimg, width = 50, height = 50)
         self.cir24 = Circle(210, 300, self.circleimg, width = 50, height = 50)
         self.cir25 = Circle(520, 500, self.circleimg, width = 50, height = 50)
-        self.timer = pygame.time.get_ticks()
 
-    def run(self):
+    def run(self, screen):
         global Score
         global KeyPressed
-        self.scrnstate = 'cir1'
+        screenstate = 'cir1'
         self.running = True
+        self.timer = pygame.time.get_ticks()
         while self.running:
 
             mousepos = pygame.mouse.get_pos()
 
-            if self.scrnstate == 'cir1':
-                self.scrn.fill('black')
-                if self.cir1.draw(self.scrn):
+            if screenstate == 'cir1':
+                screen.fill('black')
+                if self.cir1.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir2'
+                    screenstate = 'cir2'
 
-            if self.scrnstate == 'cir2':
-                self.scrn.fill('black')
-                if self.cir2.draw(self.scrn):
+            if screenstate == 'cir2':
+                screen.fill('black')
+                if self.cir2.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir3'
+                    screenstate = 'cir3'
             
-            if self.scrnstate == 'cir3':
-                self.scrn.fill('black')
-                if self.cir3.draw(self.scrn):
+            if screenstate == 'cir3':
+                screen.fill('black')
+                if self.cir3.draw(screen):
                     Score += 1
-                    self.scrnstate = 'slider1'
+                    screenstate = 'slider1'
 
-            if self.scrnstate == 'slider1':
-                self.scrn.fill('black')
+            if screenstate == 'slider1':
+                screen.fill('black')
                 if self.ps.run(0):
                     Score += 1
-                    self.scrnstate = 'cir4'
+                    screenstate = 'cir4'
 
-            if self.scrnstate == 'cir4':
-                self.scrn.fill('black')
-                if self.cir4.draw(self.scrn):
+            if screenstate == 'cir4':
+                screen.fill('black')
+                if self.cir4.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir5'
+                    screenstate = 'cir5'
 
-            if self.scrnstate == 'cir5':
-                self.scrn.fill('black')
-                if self.cir5.draw(self.scrn):
+            if screenstate == 'cir5':
+                screen.fill('black')
+                if self.cir5.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir6'
+                    screenstate = 'cir6'
 
-            if self.scrnstate == 'cir6':
-                self.scrn.fill('black')
-                if self.cir6.draw(self.scrn):
+            if screenstate == 'cir6':
+                screen.fill('black')
+                if self.cir6.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir7'
+                    screenstate = 'cir7'
 
-            if self.scrnstate == 'cir7':
-                self.scrn.fill('black')
-                if self.cir7.draw(self.scrn):
+            if screenstate == 'cir7':
+                screen.fill('black')
+                if self.cir7.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir8'
+                    screenstate = 'cir8'
 
-            if self.scrnstate == 'cir8':
-                self.scrn.fill('black')
-                if self.cir8.draw(self.scrn):
+            if screenstate == 'cir8':
+                screen.fill('black')
+                if self.cir8.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir9'
+                    screenstate = 'cir9'
 
-            if self.scrnstate == 'cir9':
-                self.scrn.fill('black')
-                if self.cir9.draw(self.scrn):
+            if screenstate == 'cir9':
+                screen.fill('black')
+                if self.cir9.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir10'
+                    screenstate = 'cir10'
 
-            if self.scrnstate == 'cir10':
-                self.scrn.fill('black')
-                if self.cir10.draw(self.scrn):
+            if screenstate == 'cir10':
+                screen.fill('black')
+                if self.cir10.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir11'
+                    screenstate = 'cir11'
 
-            if self.scrnstate == 'cir11':
-                self.scrn.fill('black')
-                if self.cir11.draw(self.scrn):
+            if screenstate == 'cir11':
+                screen.fill('black')
+                if self.cir11.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir12'
+                    screenstate = 'cir12'
 
-            if self.scrnstate == 'cir12':
-                self.scrn.fill('black')
-                if self.cir12.draw(self.scrn):
+            if screenstate == 'cir12':
+                screen.fill('black')
+                if self.cir12.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir13'
+                    screenstate = 'cir13'
 
-            if self.scrnstate == 'cir13':
-                self.scrn.fill('black')
-                if self.cir13.draw(self.scrn):
+            if screenstate == 'cir13':
+                screen.fill('black')
+                if self.cir13.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir14'
+                    screenstate = 'cir14'
 
-            if self.scrnstate == 'cir14':
-                self.scrn.fill('black')
-                if self.cir14.draw(self.scrn):
+            if screenstate == 'cir14':
+                screen.fill('black')
+                if self.cir14.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir15'
+                    screenstate = 'cir15'
 
-            if self.scrnstate == 'cir15':
-                self.scrn.fill('black')
-                if self.cir15.draw(self.scrn):
+            if screenstate == 'cir15':
+                screen.fill('black')
+                if self.cir15.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir16'
+                    screenstate = 'cir16'
 
-            if self.scrnstate == 'cir16':
-                self.scrn.fill('black')
-                if self.cir16.draw(self.scrn):
+            if screenstate == 'cir16':
+                screen.fill('black')
+                if self.cir16.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir17'
+                    screenstate = 'cir17'
 
-            if self.scrnstate == 'cir17':
-                self.scrn.fill('black')
-                if self.cir17.draw(self.scrn):
+            if screenstate == 'cir17':
+                screen.fill('black')
+                if self.cir17.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir18'
+                    screenstate = 'cir18'
 
-            if self.scrnstate == 'cir18':
-                self.scrn.fill('black')
-                if self.cir18.draw(self.scrn):
+            if screenstate == 'cir18':
+                screen.fill('black')
+                if self.cir18.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir19'
+                    screenstate = 'cir19'
 
-            if self.scrnstate == 'cir19':
-                self.scrn.fill('black')
-                if self.cir19.draw(self.scrn):
+            if screenstate == 'cir19':
+                screen.fill('black')
+                if self.cir19.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir20'
+                    screenstate = 'cir20'
 
-            if self.scrnstate == 'cir20':
-                self.scrn.fill('black')
-                if self.cir20.draw(self.scrn):
+            if screenstate == 'cir20':
+                screen.fill('black')
+                if self.cir20.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir21'
+                    screenstate = 'cir21'
 
-            if self.scrnstate == 'cir21':
-                self.scrn.fill('black')
-                if self.cir21.draw(self.scrn):
+            if screenstate == 'cir21':
+                screen.fill('black')
+                if self.cir21.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir22'
+                    screenstate = 'cir22'
 
-            if self.scrnstate == 'cir22':
-                self.scrn.fill('black')
-                if self.cir22.draw(self.scrn):
+            if screenstate == 'cir22':
+                screen.fill('black')
+                if self.cir22.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir23'
+                    screenstate = 'cir23'
 
-            if self.scrnstate == 'cir23':
-                self.scrn.fill('black')
-                if self.cir23.draw(self.scrn):
+            if screenstate == 'cir23':
+                screen.fill('black')
+                if self.cir23.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir24'
+                    screenstate = 'cir24'
 
-            if self.scrnstate == 'cir24':
-                self.scrn.fill('black')
-                if self.cir24.draw(self.scrn):
+            if screenstate == 'cir24':
+                screen.fill('black')
+                if self.cir24.draw(screen):
                     Score += 1
-                    self.scrnstate = 'cir25'
+                    screenstate = 'cir25'
 
-            if self.scrnstate == 'cir25':
-                self.scrn.fill('black')
-                if self.cir25.draw(self.scrn):
+            if screenstate == 'cir25':
+                screen.fill('black')
+                if self.cir25.draw(screen):
                     Score += 1
-                    self.scrnstate = 'slider2'
+                    screenstate = 'slider2'
 
-            if self.scrnstate == 'slider2':
-                self.scrn.fill('black')
+            if screenstate == 'slider2':
+                screen.fill('black')
                 if self.ps.run(1):
                     Score += 1
                     self.endtimer = pygame.time.get_ticks()
-                    self.scrnstate = 'blank'
+                    screenstate = 'blank'
 
-            if self.scrnstate == 'blank':
-                self.scrn.fill('black')
+            if screenstate == 'blank':
+                screen.fill('black')
                 print((self.endtimer - self.timer)//1000)
                 try:
                     if self.endtimer - self.timer < 9000:
@@ -409,7 +409,7 @@ class minigame1:
                 finally:
                     self.running = False
 
-            self.scrn.blit(self.cursor, (mousepos[0] - self.halfcursorheight, mousepos[1] - self.halfcursorwidth))
+            screen.blit(self.cursor, (mousepos[0] - self.halfcursorheight, mousepos[1] - self.halfcursorwidth))
 
             #event handler
             for event in pygame.event.get():
@@ -425,7 +425,7 @@ class minigame1:
             pygame.display.flip()
             self.clock.tick(60)
 
-        pygame.quit()
+        #pygame.quit()
     
-game = minigame1()
-game.run()
+#game = minigame1()
+#game.run()
