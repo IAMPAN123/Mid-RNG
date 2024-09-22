@@ -125,20 +125,20 @@ animations = {
 }
 
 rarity_images = {
-    'Fraud': ('Images/item images/Fraud.png',(150,212)),
-    'Worm': ('Images/item images/Worm.png',(200,180)),
-    'Judge': ('Images/item images/Judge.png',(200,139)),
-    'Gambler': ('Images/item images/Gambler.png',(200,200)),
-    'Baby': ('Images/item images/Baby.png',(200,150)),
-    'Comedian': ('Images/item images/Comedian.png',(150,190)),
-    'Farmer': ('Images/item images/Farmer.png',(150,207)),
-    'Cat': ('Images/item images/Cat.png',(200,201)),
-    'Freaky': ('Images/item images/Freaky.png',(200,180)),
-    'Misogynint': ('Images/item images/Misogynist.png',(200,142)),
-    'Specialz': ('Images/item images/Specialz.png',(200,189)),
-    'Nah': ('Images/item images/Nah.png',(200,112)),
-    'Void': ('Images/item images/Void.png',(200,200)),
-    'Malevolent': ('Images/item images/Malevolent.png',(200,200)),
+    'Fraud': ('Images/frauditem.png',(150,212)),
+    'Worm': ('Images/wormitem.png',(200,180)),
+    'Judge': ('Images/judgeitem.png',(200,139)),
+    'Gambler': ('Images/gambleritem.png',(200,200)),
+    'Baby': ('Images/babyitem.png',(200,150)),
+    'Comedian': ('Images/comedianitem.png',(150,190)),
+    'Farmer': ('Images/farmeritem.png',(150,207)),
+    'Cat': ('Images/catitem.png',(200,201)),
+    'Freaky': ('Images/freakyitem.png',(200,180)),
+    'Misogynint': ('Images/misogynistitem.png',(200,142)),
+    'Specialz': ('Images/specialzitem.png',(200,189)),
+    'Nah': ('Images/nahitem.png',(200,112)),
+    'Void': ('Images/voiditem.png',(200,200)),
+    'Malevolent': ('Images/malevolentitem.png',(200,200)),
 }
 
 display_image = None
@@ -187,7 +187,7 @@ def roll():
                     if x in rarity_images:
                         image_path, image_size = rarity_images[x]
                         display_image = pygame.image.load(image_path).convert_alpha()
-                        display_image = pygame.transform.scale(display_image, image_size)  # 按指定尺寸缩放
+                        display_image = pygame.transform.scale(display_image, image_size) 
                         image_visible = True
                         image_display_start_time = pygame.time.get_ticks()
 
