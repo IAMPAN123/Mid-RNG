@@ -29,6 +29,7 @@ pygame.mixer.music.play(-1)
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
 nfont = pygame.font.SysFont("Comic Sans MS", 20)
 gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+ldisplay = mfont.render(f'Luck = {round(r.Luck, 1)}', False, (250, 250, 250))
 ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
 
 # Set up background
@@ -108,7 +109,6 @@ current_animation = None
 
 # Load custom mouse cursor image
 cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
-pygame.mouse.set_visible(False)  # Hide default mouse cursor
 
 def roll():
     global current_animation
@@ -118,7 +118,6 @@ def roll():
             try:
                 Result = random.randint(1, int(ActualFinalChance))
                 if Result == 1:
-                    print(x)
                     cu.gaingold(r.Rarity[x])
                     r.BonusRollCount += 1
                     if r.BonusRollCount == 10:
@@ -219,25 +218,26 @@ def fade_out(width, height):
         pygame.display.update()
         pygame.time.delay(4)
 
-def updategold():
-    screen.fill((0, 0, 0))
-    screen.blit(gdisplay, (10, 0))
-
 def update_and_draw_inventory():
     # Check if inventory is open and draw the inventory if it is
     if inventory.is_open:
         inventory.update_animation()  # Call this to update any ongoing animations
         inventory.draw()  # Ensure inventory is drawn when open
 
+#luck minus
+UNLUCK = pygame.USEREVENT + 1
+
 # Main loop
 running = True
+menumouse = True
 game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
 
 while running:
     screen.blit(bg1, (0, 0))
-    pygame.mouse.set_visible(True)
+    menumouse = True
+    pygame.mouse.set_visible(False)
 
     if inventory.current_page == 1:
         screen.blit(title, title_rect)
@@ -248,8 +248,10 @@ while running:
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
         gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+        ldisplay = mfont.render(f'Luck = {round(r.Luck, 1)}', False, (250, 250, 250))
         ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
+        screen.blit(ldisplay, (10, 30))
         screen.blit(ucost, (450, 70))
 
         if backpack_button.draw(screen):
@@ -279,9 +281,16 @@ while running:
                 cu.passivegain += 1
                 r.Luck += 0.1
         if minigame_button.draw(screen):
+            menumouse = False
             pygame.mouse.set_visible(False)
             game.run(screen)
 
+        if mini.passorfail() == True:
+            r.Luck += 1
+            pygame.time.set_timer(UNLUCK, 5000)
+        elif mini.passorfail() == False:
+            pass
+        
         update_and_draw_inventory()
 
         # Equipment screen handling
@@ -313,14 +322,17 @@ while running:
         LastTimeUpdate = CurrentTime
 
     # Draw custom mouse cursor
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    screen.blit(cursor_image, (mouse_x, mouse_y))
+    if menumouse == True:
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        screen.blit(cursor_image, (mouse_x, mouse_y))
 
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             inventory.save_item_counts()
-            running = False        
+            running = False   
+        if event.type == UNLUCK:
+            r.Luck -= 1     
 
     pygame.display.update()
     clock.tick(60)

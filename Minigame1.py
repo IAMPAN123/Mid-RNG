@@ -5,6 +5,7 @@ pygame.display.init()
 pygame.mixer.init()
 
 Score = 0
+status = None
 KeyPressed = False
 Selected = 'white'
 Unselected = 'gray'
@@ -49,8 +50,13 @@ class printslider:
         slider.render(self.app)
         return slider.score()
         
-
 #Score
+def passorfail():
+        global status
+        if status == 'Pass':
+            return True
+        elif status == 'Fail':
+            return False
 
 #circle (straight from huisze)
 class Circle():
@@ -226,6 +232,7 @@ class minigame1:
     def run(self, screen):
         global Score
         global KeyPressed
+        global status
         screenstate = 'cir1'
         self.running = True
         self.timer = pygame.time.get_ticks()
@@ -401,11 +408,11 @@ class minigame1:
                 print((self.endtimer - self.timer)//1000)
                 try:
                     if self.endtimer - self.timer < 9000:
-                        print('Fail (Too early)')
+                        status = 'Fail'
                     elif self.endtimer - self.timer > 11000:
-                        print('Fail (Too late)')
+                        status = 'Fail'
                     else:
-                        print('Pass')
+                        status = 'Pass'
                 finally:
                     self.running = False
 
