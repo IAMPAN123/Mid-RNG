@@ -1,4 +1,4 @@
-#WIP
+# #WIP
 import pygame
 
 pygame.display.init()
@@ -50,7 +50,7 @@ class printslider:
         slider.render(self.app)
         return slider.score()
         
-#Score
+Score
 def passorfail():
         global status
         if status == 'Pass':
