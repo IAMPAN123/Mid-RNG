@@ -103,27 +103,49 @@ malevolent_paths = [f'Images/malevolent pic/malevolent_{i:03}.png' for i in rang
 
 # Create animation instances
 animations = {
-    'Common': Animation(common_paths, (450, 253), (75, 75)),
-    'Uncommon': Animation(uncommon_paths, (450, 253), (75, 75)),
-    'Rare': Animation(rare_paths, (450, 253), (75, 75)),
-    'Epic': Animation(epic_paths, (450, 253), (75, 75)),
-    'Legendary': Animation(legendary_paths, (450, 253), (75, 75)),
-    'Mythic':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Fraud':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Worm':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Judge':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Gambler':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Baby':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Comedian':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Farmer':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Cat':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Freaky':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Misogynint':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Specialz':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Nah':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Void':  Animation(legendary_paths, (450, 253), (75, 75)),
-    'Malevolent':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Common': Animation(common_paths, (450, 253), (75, 95)),
+    'Uncommon': Animation(uncommon_paths, (450, 253), (75, 95)),
+    'Rare': Animation(rare_paths, (450, 253), (75, 95)),
+    'Epic': Animation(epic_paths, (450, 253), (75, 95)),
+    'Legendary': Animation(legendary_paths, (450, 253), (75, 95)),
+    'Mythic':  Animation(mythic_paths, (450, 253), (75, 95)),
+    'Fraud':  Animation(fraud_paths, (450, 253), (75, 95)),
+    'Worm':  Animation(worm_paths, (450, 253), (75, 95)),
+    'Judge':  Animation(judge_paths, (450, 253), (75, 95)),
+    'Gambler':  Animation(gambler_paths, (450, 253), (75, 95)),
+    'Baby':  Animation(baby_paths, (450, 253), (75, 95)),
+    'Comedian':  Animation(comedian_paths, (450, 253), (75, 95)),
+    'Farmer':  Animation(farmer_paths, (450, 253), (75, 95)),
+    'Cat':  Animation(cat_paths, (450, 253), (75, 95)),
+    'Freaky':  Animation(freaky_paths, (450, 253), (75, 95)),
+    'Misogynint':  Animation(misogynint_paths, (450, 253), (75, 95)),
+    'Specialz':  Animation(specialz_paths, (450, 253), (75, 95)),
+    'Nah':  Animation(nah_paths, (450, 253), (75, 95)),
+    'Void':  Animation(void_paths, (450, 253), (75, 95)),
+    'Malevolent':  Animation(malevolent_paths, (450, 253), (75, 95)),
 }
+
+rarity_images = {
+    'Fraud': ('Images/item images/Fraud.png',(150,212)),
+    'Worm': ('Images/item images/Worm.png',(200,180)),
+    'Judge': ('Images/item images/Judge.png',(200,139)),
+    'Gambler': ('Images/item images/Gambler.png',(200,200)),
+    'Baby': ('Images/item images/Baby.png',(200,150)),
+    'Comedian': ('Images/item images/Comedian.png',(150,190)),
+    'Farmer': ('Images/item images/Farmer.png',(150,207)),
+    'Cat': ('Images/item images/Cat.png',(200,201)),
+    'Freaky': ('Images/item images/Freaky.png',(200,180)),
+    'Misogynint': ('Images/item images/Misogynist.png',(200,142)),
+    'Specialz': ('Images/item images/Specialz.png',(200,189)),
+    'Nah': ('Images/item images/Nah.png',(200,112)),
+    'Void': ('Images/item images/Void.png',(200,200)),
+    'Malevolent': ('Images/item images/Malevolent.png',(200,200)),
+}
+
+display_image = None
+image_display_time = 2000  
+image_display_start_time = 0
+image_visible = False
 
 # Initialize inventory and equipment
 inventory = Inventory(screen)
@@ -135,11 +157,12 @@ instruction_active = False
 current_animation = None
 
 # Load custom mouse cursor image
-cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
+cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (30, 29))
 pygame.mouse.set_visible(False)  # Hide default mouse cursor
 
 def roll():
-    global current_animation
+    global current_animation, image_visible, image_display_start_time, display_image
+    image_visible = False
     for x in reversed(r.Rarity):
             NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
             ActualFinalChance = 1/NotActualFinalChance
@@ -162,6 +185,13 @@ def roll():
                      # Set the animation based on rarity
                     current_animation = animations[x]
                     current_animation.reset()
+
+                    if x in rarity_images:
+                        image_path, image_size = rarity_images[x]
+                        display_image = pygame.image.load(image_path).convert_alpha()
+                        display_image = pygame.transform.scale(display_image, image_size)  # 按指定尺寸缩放
+                        image_visible = True
+                        image_display_start_time = pygame.time.get_ticks()
 
                     break
                 else:
@@ -269,7 +299,7 @@ LastTimeUpdate = pygame.time.get_ticks()
 
 while running:
     screen.blit(bg1, (0, 0))
-    pygame.mouse.set_visible(True)
+    pygame.mouse.set_visible(False)
 
     if inventory.current_page == 1:
         screen.blit(title, title_rect)
@@ -322,6 +352,15 @@ while running:
         current_animation.draw(screen)
         if current_animation.finished:
             current_animation = None
+
+    if image_visible:
+        current_time = pygame.time.get_ticks()
+        if current_time - image_display_start_time < image_display_time:
+            if display_image:
+                screen.blit(display_image, (205, 295)) 
+        else:
+            image_visible = False  
+            display_image = None  
 
         update()
 
