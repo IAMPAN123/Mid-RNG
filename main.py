@@ -5,7 +5,6 @@ import SliderExample as cd
 from button import Button
 from Game.inventory import Inventory
 from Game.gui import draw_inventory  # Check that draw_inventory is not conflicting with inventory.draw
-from Game.equipment import Equipment
 from roll_animation import Animation
 
 import json
@@ -77,9 +76,8 @@ animations = {
     'Mid': Animation(mid_paths, (450, 290), (75, 140)),
 }
 
-# Initialize inventory and equipment
+# Initialize inventory 
 inventory = Inventory(screen)
-equipment = Equipment(screen) 
 
 # Panel state
 settings_active = False
@@ -202,17 +200,12 @@ while running:
 
         if backpack_button.draw(screen):
             inventory.open()
-        
-        if equipment_button.draw(screen):
-            equipment.open()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if inventory.is_open:  # Only handle inventory events if it's open
                 inventory.handle_event(event)
-            if equipment.is_open:
-                equipment.handle_event(event)
 
         if roll_button.draw(screen):
             roll()
@@ -227,10 +220,6 @@ while running:
         if inventory.is_open:
             inventory.update_animation()  # Call this to update any ongoing animations
             inventory.draw()  # Ensure inventory is drawn when open
-
-        # Equipment screen handling
-        if equipment.is_open:
-            equipment.draw()  # Draw equipment screen
             
     # Update and draw the current animation
     if current_animation:

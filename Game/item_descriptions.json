@@ -12,116 +12,91 @@
         "description": "A rare and valuable item."
     },
     "3": {
-        "name": "Legendary Item",
+        "name": "Epic Item",
         "description": "An item with legendary effects lol."
     },
     "4": {
-        "name": "Mid Item",
+        "name": "Legendary Item",
         "description": "It is said to have the Dev's Power."
     },
     "5": {
-        "name": "Legendary Item",
+        "name": "Mythic Item",
         "description": "Placeholder 6."
     },
     "6": {
-        "name": "Legendary Item",
+        "name": "Fraud Item",
         "description": "Placeholder 7."
     },
     "7": {
-        "name": "Legendary Item",
+        "name": "Worm Item",
         "description": "Placeholder 8."
     },
     "8": {
-        "name": "Legendary Item",
+        "name": "Judge Item",
         "description": "Placeholder 9."
     },
     "9": {
-        "name": "Legendary Item",
+        "name": "Gambler Item",
         "description": "Placeholder 10."
     },
     "10": {
-        "name": "Legendary Item",
+        "name": "Anti-Women Item",
         "description": "Placeholder 11."
     },
     "11": {
-        "name": "Legendary Item",
+        "name": "Comedian Item",
         "description": "Placeholder 12."
     },
     "12": {
-        "name": "Legendary Item",
+        "name": "Farmer Item",
         "description": "Placeholder 13."
     },
     "13": {
-        "name": "Legendary Item",
+        "name": "Cat Item",
         "description": "Placeholder 14."
     },
     "14": {
-        "name": "Legendary Item",
+        "name": "Freaky Item",
         "description": "Placeholder 15."
     },
     "15": {
-        "name": "Legendary Item",
+        "name": "Cog Item",
         "description": "Placeholder 16."
     },
     "16": {
-        "name": "Legendary Item",
+        "name": "Specialz Item",
         "description": "Placeholder 17."
     },
     "17": {
-        "name": "Legendary Item",
+        "name": "Nah Item",
         "description": "Placeholder 18."
     },
     "18": {
-        "name": "Legendary Item",
+        "name": "Void Item",
         "description": "Placeholder 19."
     },
     "19": {
-        "name": "Legendary Item",
+        "name": "Malevolent Item",
         "description": "Placeholder 20."
     },
     "20": {
-        "name": "Legendary Item",
+        "name": "Finger Equipment",
         "description": "Placeholder 21."
     },
     "21": {
-        "name": "Legendary Item",
+        "name": "Baby Rattle Equipment",
         "description": "Placeholder 22."
     },
     "22": {
-        "name": "Legendary Item",
+        "name": "ISOH Equipment",
         "description": "Placeholder 23."
     },
     "23": {
-        "name": "Legendary Item",
+        "name": "Jail World",
         "description": "Placeholder 24."
     },
     "24": {
-        "name": "Legendary Item",
+        "name": "Sex() Eyes",
         "description": "Placeholder 25."
-    },
-    "25": {
-        "name": "Equipment0",
-        "description": "Placeholder 26.",
-        "ways_to_obtain": "2 common + 2 uncommon"
-    },
-    "26": {
-        "name": "Equipment1",
-        "description": "Placeholder 27.",
-        "ways_to_obtain": "2 uncommon + 2 rare"
-    },
-    "27": {
-        "name": "Equipment2",
-        "description": "Placeholder 28.",
-        "ways_to_obtain": "2 rare + 2 epic"
-    },
-    "28": {
-        "name": "Equipment3",
-        "description": "Placeholder 29.",
-        "ways-to_obtain": "2 epic + 2 legendary"
-    },
-    "29": {
-        "name": "Equipment4",
-        "description": "Placeholder 30.",
-        "ways_to_obtain": "2 legendary + 2 mid"
     }
 }
