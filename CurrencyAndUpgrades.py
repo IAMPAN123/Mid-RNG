@@ -7,17 +7,19 @@ gold = 100
 if gold < 0:
     gold = 0
 
-def gaingold(ammount):
+def gaingold(amount):
     global gold
-    gold += ammount
+    gold += amount
 
-def purchase(ammount):
+def purchase(amount):
     global gold
-    gold -= ammount
+    if amount > gold:
+        pass
+    else:
+        gold -= amount
 
 #Upgrade
 totalupg = 0
-testupg = 0
 passivegain = 0
 
 #tinput = rollgold(int(input()))

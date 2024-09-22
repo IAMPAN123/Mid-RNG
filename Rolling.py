@@ -15,10 +15,6 @@ item_to_slot_count = load_item_to_slot()
 
 # Luck variables
 Base = 1
-UpgradeLuck = 0
-EquipmentLuck = 0
-MinigameLuck = 0
-PotionLuck = 0
 Bonus = 1
 BonusRollCount = 0
 
@@ -35,10 +31,10 @@ inventory = Inventory(screen=None)  # Assuming you're handling screen elsewhere
 
 # Item rarity
 Rarity = {
-    'Common': 1, 'Uncommon': 2, 'Rare': 4, 'Epic': 8, 'Legendary': 10,
-    'Mythic': 15, 'Fraud': 30, 'Worm': 50, 'Judge': 100, 'Gambler': 500,
-    'Anti-Women': 2500, 'Comedian': 10000, 'Farmer': 50000, 'Cat': 100000, 'Freaky': 500000,
-    'Cog': 800000, 'Specialz': 1000000, 'Nah': 10000000, 'Void': 50000000, 'Malevolent': 100000000,
+    'Common'    : 1,        'Uncommon'  : 2,        'Rare'  : 4,        'Epic'  : 8,         'Legendary'    : 10,
+    'Mythic'    : 15,       'Fraud'     : 30,       'Worm'  : 50,       'Judge' : 100,       'Gambler'      : 500,
+    'Baby'      : 2500,      'Comedian' : 10000,    'Farmer': 50000,    'Cat'   : 100000,    'Freaky'       : 500000,
+    'Misogynist': 800000,    'Specialz' : 1000000,  'Nah'   : 10000000, 'Void'  : 50000000,  'Malevolent'   : 100000000
 }
 
 # Rolling Calculation
@@ -47,7 +43,7 @@ def FinalChance(Chance, Luck, Bonus):
     return RollChance
 
 # Rolling System
-run = True
+#run = True
 
 # Uncomment and use this part for interactive rolling
 # while run:
