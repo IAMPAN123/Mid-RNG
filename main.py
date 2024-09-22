@@ -82,7 +82,21 @@ uncommon_paths = [f'Images/uncommon pic/uncommon_br_{i:03}.png' for i in range(3
 rare_paths = [f'Images/rare pic/rare_br_{i:03}.png' for i in range(34)]
 epic_paths = [f'Images/epic pic/epic_br_{i:03}.png' for i in range(33)]
 legendary_paths = [f'Images/legendary pic/legendary_br_{i:03}.png' for i in range(33)]
-mid_paths = [f'Images/mid pic/mid_br_{i:03}.png' for i in range(34)]
+mythic_paths = [f'Images/mythic pic/mythic_{i:03}.png' for i in range(33)]
+fraud_paths = [f'Images/fraud pic/fraud_{i:03}.png' for i in range(32)]
+worm_paths = [f'Images/worm pic/worm_{i:03}.png' for i in range(33)]
+judge_paths = [f'Images/judge pic/judge_{i:03}.png' for i in range(33)]
+gambler_paths = [f'Images/gambler pic/gambler_{i:03}.png' for i in range(32)]
+baby_paths = [f'Images/baby pic/baby_{i:03}.png' for i in range(33)]
+comedian_paths = [f'Images/comedian pic/comedian_{i:03}.png' for i in range(33)]
+farmer_paths = [f'Images/farmer pic/farmer_{i:03}.png' for i in range(32)]
+cat_paths = [f'Images/cat pic/cat_{i:03}.png' for i in range(32)]
+freaky_paths = [f'Images/freaky pic/freaky_{i:03}.png' for i in range(32)]
+misogynint_paths = [f'Images/misogynint pic/misogynint_{i:03}.png' for i in range(32)]
+specialz_paths = [f'Images/specialz pic/specialz_{i:03}.png' for i in range(32)]
+nah_paths = [f'Images/nah pic/nah_{i:03}.png' for i in range(32)]
+void_paths = [f'Images/void pic/void_{i:03}.png' for i in range(33)]
+malevolent_paths = [f'Images/malevolent pic/malevolent_{i:03}.png' for i in range(33)]
 
 # Create animation instances
 animations = {
@@ -91,7 +105,21 @@ animations = {
     'Rare': Animation(rare_paths, (450, 253), (75, 75)),
     'Epic': Animation(epic_paths, (450, 253), (75, 75)),
     'Legendary': Animation(legendary_paths, (450, 253), (75, 75)),
-    'Mid': Animation(mid_paths, (450, 253), (75, 75)),
+    'Mythic':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Fraud':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Worm':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Judge':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Gambler':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Baby':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Comedian':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Farmer':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Cat':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Freaky':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Misogynint':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Specialz':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Nah':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Void':  Animation(legendary_paths, (450, 253), (75, 75)),
+    'Malevolent':  Animation(legendary_paths, (450, 253), (75, 75)),
 }
 
 # Initialize inventory and equipment
@@ -220,11 +248,15 @@ def updategold():
     screen.fill((0, 0, 0))
     screen.blit(gdisplay, (10, 0))
 
-def update_and_draw_inventory():
+def update():
     # Check if inventory is open and draw the inventory if it is
     if inventory.is_open:
         inventory.update_animation()  # Call this to update any ongoing animations
         inventory.draw()  # Ensure inventory is drawn when open
+
+    # Equipment screen handling
+    if equipment.is_open:
+        equipment.draw()  # Draw equipment screen
 
 # Main loop
 running = True
@@ -268,11 +300,7 @@ while running:
             cu.testupg += 1
             cu.passivegain += 1
 
-        update_and_draw_inventory()
-
-        # Equipment screen handling
-        if equipment.is_open:
-            equipment.draw()  # Draw equipment screen
+        update()
             
     # Update and draw the current animation
     if current_animation:
@@ -281,7 +309,7 @@ while running:
         if current_animation.finished:
             current_animation = None
 
-        update_and_draw_inventory()
+        update()
 
     if settings_active:
         # Overlay main screen
