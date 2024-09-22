@@ -4,26 +4,26 @@ from spritesheet import SpriteSheet
 
 class Inventory:
     def __init__(self, screen):
-        self.screen = screen
+        self.screen = screen #inventory screens
         self.inventory_width = 400
         self.inventory_height = 560
         self.inventory_position = ((600 - self.inventory_width) // 2, (700 - self.inventory_height) // 3)
-        self.font = pygame.font.SysFont(None, 36)
+        self.font = pygame.font.SysFont(None, 36) #fonts, spacing
         self.description_font = pygame.font.SysFont(None, 18)
         self.line_spacing = 3
         self.inventory_text = self.font.render('Inventory', True, (255, 255, 255))
-        self.slot_size = 50
+        self.slot_size = 50 #slots, spacing, idle animation
         self.padding = 10
         self.selected_slot = None
         self.animation_index = 0
-        self.is_open = False
+        self.is_open = False #page navigation
         self.current_page = 1
-        self.close_button_rect = None
-        self.left_screen_width_ratio = 0.3
+        self.close_button_rect = None #inventory exit button
+        self.left_screen_width_ratio = 0.3 #botton panels
         self.right_screen_width_ratio = 0.7
         self.locked_image = pygame.image.load('Images/locked.png')
 
-        self.left_screen_width = int(self.inventory_width * self.left_screen_width_ratio)
+        self.left_screen_width = int(self.inventory_width * self.left_screen_width_ratio) 
         self.right_screen_width = int(self.inventory_width * self.right_screen_width_ratio)
         self.screen_height = 100
 
@@ -39,16 +39,16 @@ class Inventory:
         self.item_to_slot_count_file = 'Game/item_to_slot_count.json'
         self.load_item_to_slot()
         self.crafting_recipes = {
-            (0, 1): 20,  # item0 + item1 = equip0
-            (2, 3): 21,  # item2 + item3 = equip1
-            (4, 5): 22,  # item4 + item5 = equip2
-            (6, 7): 23,  # item6 + item7 = equip3
-            (8, 9): 24,  # item8 + item9 = equip4
+            ('Common','Uncommon'): "Finger",  # item0 + item1 = equip0
+            ('Mythic', 'Fraud'): "Baby Rattle",  # item2 + item3 = equip1
+            ('Worm', 'Gambler'): "ISOH",  # item4 + item5 = equip2
+            ('Cat', 'Freaky'): "Jail World",  # item6 + item7 = equip3
+            ('Nah', 'Void'): "Sex() Eyes",  # item8 + item9 = equip4
             # Add more recipes as needed
         }
         self.selected_slot1 = None
         self.selected_slot2 = None
-        self.product_slot = len(self.inventory_slots)  # Add new slots for crafting
+        
         self.merge_button_rect = None
         self.last_click_time = None
         self.is_clicking = False
@@ -89,31 +89,31 @@ class Inventory:
     def load_item_images(self):
         """Load item images from the folder."""
         item_images = [
-            pygame.image.load('Images/item0.png').convert_alpha(),                    #1
-            pygame.image.load('Images/item1.png').convert_alpha(),
-            pygame.image.load('Images/item2.png').convert_alpha(),
-            pygame.image.load('Images/item3.png').convert_alpha(),
-            pygame.image.load('Images/item4.png').convert_alpha(),
-            pygame.image.load('Images/item5.png').convert_alpha(),
-            pygame.image.load('Images/item6.png').convert_alpha(),
-            pygame.image.load('Images/item7.png').convert_alpha(),
-            pygame.image.load('Images/item8.png').convert_alpha(),
-            pygame.image.load('Images/item9.png').convert_alpha(),
-            pygame.image.load('Images/item10.png').convert_alpha(),
-            pygame.image.load('Images/item11.png').convert_alpha(),
-            pygame.image.load('Images/item12.png').convert_alpha(),
-            pygame.image.load('Images/item13.png').convert_alpha(),
-            pygame.image.load('Images/item14.png').convert_alpha(),
-            pygame.image.load('Images/item15.png').convert_alpha(),
-            pygame.image.load('Images/item16.png').convert_alpha(),
-            pygame.image.load('Images/item17.png').convert_alpha(),
-            pygame.image.load('Images/item18.png').convert_alpha(),
-            pygame.image.load('Images/item19.png').convert_alpha(),
-            pygame.image.load('Images/equip0.png').convert_alpha(),                    #1
-            pygame.image.load('Images/equip1.png').convert_alpha(),
-            pygame.image.load('Images/equip2.png').convert_alpha(),
-            pygame.image.load('Images/equip3.png').convert_alpha(),
-            pygame.image.load('Images/equip4.png').convert_alpha(),
+            pygame.image.load('Images/commonitem.png').convert_alpha(),                    
+            pygame.image.load('Images/uncommonitem.png').convert_alpha(),
+            pygame.image.load('Images/rareitem.png').convert_alpha(),
+            pygame.image.load('Images/epicitem.png').convert_alpha(),
+            pygame.image.load('Images/legendaryitem.png').convert_alpha(),
+            pygame.image.load('Images/mythicitem.png').convert_alpha(),
+            pygame.image.load('Images/frauditem.png').convert_alpha(),
+            pygame.image.load('Images/wormitem.png').convert_alpha(),
+            pygame.image.load('Images/judgeitem.png').convert_alpha(),
+            pygame.image.load('Images/gambleritem.png').convert_alpha(),
+            pygame.image.load('Images/babyitem.png').convert_alpha(),
+            pygame.image.load('Images/comedianitem.png').convert_alpha(),
+            pygame.image.load('Images/farmeritem.png').convert_alpha(),
+            pygame.image.load('Images/catitem.png').convert_alpha(),
+            pygame.image.load('Images/freakyitem.png').convert_alpha(),
+            pygame.image.load('Images/misogynistitem.png').convert_alpha(),
+            pygame.image.load('Images/specialzitem.png').convert_alpha(),
+            pygame.image.load('Images/nahitem.png').convert_alpha(),
+            pygame.image.load('Images/voiditem.png').convert_alpha(),
+            pygame.image.load('Images/malevolentitem.png').convert_alpha(),
+            pygame.image.load('Images/fingerequip.png').convert_alpha(),                    
+            pygame.image.load('Images/babyrattleequip.png').convert_alpha(),
+            pygame.image.load('Images/isohequip.png').convert_alpha(),
+            pygame.image.load('Images/jailworldequip.png').convert_alpha(),
+            pygame.image.load('Images/sex()eyesequip.png').convert_alpha(),
             # Add more as necessary for other slots
         ]
 
@@ -132,7 +132,8 @@ class Inventory:
     def load_item_to_slot(self):
         """Load the item-to-slot mapping from a JSON file."""
         with open('Game/item_to_slot_count.json', 'r') as file:
-            return json.load(file)
+            item_names = json.load(file)
+            return item_names
 
     def increment_counter(self, item_name):
         """Increment the counter for the given item."""
@@ -149,9 +150,9 @@ class Inventory:
             item_counts = json.load(f)
 
         # Convert the items to the correct keys as strings
-        item1_key = f"item{slot1_item}"
-        item2_key = f"item{slot2_item}"
-        result_key = f"item{result_item}"
+        item1_key = slot1_item
+        item2_key = slot2_item
+        result_key = result_item
 
         # Decrease counters for the selected items, ensuring they don't go below 0
         item_counts[item1_key] = max(0, item_counts.get(item1_key, 0) - 1)
@@ -232,15 +233,13 @@ class Inventory:
                             print(f"Selected Slot 2: {i} (right-click)")
                     else:
                         print(f"Both slots are already selected.")
+
                     break
 
     def check_merge_button_click(self, mouse_x, mouse_y):
         merge_button_pos = (self.inventory_position[0] + 280, self.inventory_position[1] + self.inventory_height - 176)
         button_width = 90
         button_height = 40
-
-        # Print mouse coordinates for debugging
-        print(f"Mouse clicked at ({mouse_x}, {mouse_y})")
 
         # Check if the mouse click is within the merge button area
         if merge_button_pos[0] <= mouse_x <= merge_button_pos[0] + button_width and \
@@ -257,48 +256,51 @@ class Inventory:
     def merge_items(self):
         # Define your item merge combinations
         combinations = {
-            (0, 1): 20,  # item0 + item1 = equip0
-            (2, 3): 21,  # item2 + item3 = equip1
-            (4, 5): 22,  # item4 + item5 = equip2
-            (6, 7): 23,  # item6 + item7 = equip3
-            (8, 9): 24,  # item8 + item9 = equip4            
-            # Add other combinations as needed
-        }
+                frozenset(('Common', 'Uncommon')): "Finger",
+                frozenset(('Baby', 'Fraud')): "Baby Rattle",
+                frozenset(('Worm', 'Gambler')): "ISOH",
+                frozenset(('Cat', 'Freaky')): "Jail World",
+                frozenset(('Nah', 'Void')): "Sex() Eyes",
+            }
+
+        with open('Game/item_to_slot_count.json', 'r') as file:
+            item_data = json.load(file)
 
         # Get the selected items
         if self.selected_slot1 is not None and self.selected_slot2 is not None:
-            slot1_item = self.selected_slot1
-            slot2_item = self.selected_slot2
+            # Get the list of item names from the JSON keys
+            item_names = list(item_data.keys())  # This will be ['Common', 'Uncommon', ...]
+            slot1_item = item_names[self.selected_slot1]  # Use correct mapping to item name
+            slot2_item = item_names[self.selected_slot2]
 
             # Ensure slots are different and valid
-            if slot1_item != slot2_item and (slot1_item, slot2_item) in combinations:
+            if slot1_item != slot2_item and frozenset((slot1_item, slot2_item)) in combinations:
                 # Get the resulting equipment item from the combination
-                result_item = combinations[(slot1_item, slot2_item)]
+                result_item = combinations[frozenset((slot1_item, slot2_item))]
 
                 # Update the counters in item_to_slot_count.json
                 self.update_item_counts(slot1_item, slot2_item, result_item)
-                print(f"Merge successful: Created equip{result_item}")
-                
-                # Display the product item in the product slot
-                product_slot_pos = (self.inventory_position[0] + 300, self.inventory_position[1] + self.inventory_height - 186)
-                product_image = pygame.transform.scale(self.item_images[result_item], (self.slot_size, self.slot_size))
-                self.screen.blit(product_image, product_slot_pos)
+                print(f"Merge successful: Created {result_item}")
 
                 #Update the inventory display after merging
-                self.item_to_slot_count[f"item{slot1_item}"] -= 1
-                self.item_to_slot_count[f"item{slot2_item}"] -= 1
-                self.item_to_slot_count[f"item{result_item}"] += 1
+                self.item_to_slot_count[slot1_item] -= 1
+                self.item_to_slot_count[slot2_item] -= 1
+                self.item_to_slot_count[result_item] += 1
+
+                with open('Game/item_to_slot_count.json', 'w') as file:
+                    json.dump(item_data, file, indent=4)
 
                 # Update inventory slots immediately after merge
                 self.draw()  # Redraw the slots using the existing method
 
-                # Optionally reset selected slots after merging
+                # Reset selected slots after merging
                 self.selected_slot1 = None
                 self.selected_slot2 = None
+
             else:
                 print("Invalid combination or slots not selected.")
         else:
-            print("Both slots must be selected for merging.")  
+            print("Both slots must be selected for merging.")
 
     def update_animation(self):
         if self.selected_slot is not None:
@@ -335,7 +337,7 @@ class Inventory:
 
         # Draw the merge button
         merge_button_text = self.font.render("Merge", True, (255, 255, 255))
-        pygame.draw.rect(self.screen, (0, 255, 0), (*merge_button_pos, 90, 40))  # Green button with width 80, height 40
+        pygame.draw.rect(self.screen, (0, 255, 0), (*merge_button_pos, 90, 40))  # Green button with width 90, height 40
         self.screen.blit(merge_button_text, (merge_button_pos[0] + 8, merge_button_pos[1] + 6))  # Position text within the button
 
         # Set merge_button_rect for collision detection
@@ -349,6 +351,36 @@ class Inventory:
         if self.selected_slot2 is not None:
             item_image = pygame.transform.scale(self.item_images[self.selected_slot2], (self.slot_size, self.slot_size))
             self.screen.blit(item_image, selected_slot2_pos)
+
+        # Check if both selected items can create a product
+        if self.selected_slot1 is not None and self.selected_slot2 is not None:
+            slot1_item = list(self.item_to_slot_count.keys())[self.selected_slot1]
+            slot2_item = list(self.item_to_slot_count.keys())[self.selected_slot2]
+
+            # Define your combinations here (make sure this matches your existing recipe dictionary)
+            combinations = {
+                frozenset(('Common', 'Uncommon')): "Finger",
+                frozenset(('Baby', 'Fraud')): "Baby Rattle",
+                frozenset(('Worm', 'Gambler')): "ISOH",
+                frozenset(('Cat', 'Freaky')): "Jail World",
+                frozenset(('Nah', 'Void')): "Sex() Eyes",
+            }
+
+            # Check if the selected items form a valid recipe
+            if frozenset((slot1_item, slot2_item)) in combinations:
+                product_item = combinations[frozenset((slot1_item, slot2_item))]
+                product_image_index = list(self.item_to_slot_count.keys()).index(product_item)
+
+                # Draw the product image
+                product_image = pygame.transform.scale(self.item_images[product_image_index], (self.slot_size, self.slot_size))
+                product_slot_pos = (self.inventory_position[0] + 210, self.inventory_position[1] + self.inventory_height - 186)
+                self.screen.blit(product_image, product_slot_pos)
+                # Set a flag so that the product image is displayed only once
+                self.product_displayed = True
+
+        # Reset product_displayed if any slot is deselected
+        if self.selected_slot1 is None or self.selected_slot2 is None:
+                self.product_displayed = False
 
     def draw(self):
         """Draw the inventory window, slots, text, close button, and additional screens."""
@@ -365,6 +397,13 @@ class Inventory:
         close_text = self.font.render('X', True, (255, 255, 255))  # White 'X'
         self.screen.blit(close_text, (self.close_button_rect.x + 7, self.close_button_rect.y + 2))  # Positioning 'X' in the center
 
+        # Load item data from JSON file (assuming it's named 'item_to_slot_count.json')
+        with open('Game/item_to_slot_count.json', 'r') as json_file:
+            item_data = json.load(json_file)
+
+        # Extract item names from the JSON (the keys of the dictionary)
+        item_names = list(item_data.keys())
+
         # Draw inventory slots
         for i, (x, y) in enumerate(self.inventory_slots):
             pygame.draw.rect(self.screen, (100, 100, 100), (x, y, self.slot_size, self.slot_size))
@@ -375,58 +414,36 @@ class Inventory:
                 item_image = pygame.transform.scale(self.item_images[i], (self.slot_size, self.slot_size))
                 self.screen.blit(item_image, (x, y))  # Draw item image first
 
-            # Draw the counter at the bottom right of each slot
-            counter_value = self.item_to_slot_count.get(f"item{i}", 0)
-            # If the item is unlocked (counter > 0), draw the item image
-            if counter_value > 0:
-                if i < len(self.item_images):  # Ensure index is within bounds of the item_images list
-                    item_image = self.item_images[i]  # Access the image via index
-                    item_image_scaled = pygame.transform.scale(item_image, (self.slot_size, self.slot_size))
-                    self.screen.blit(item_image_scaled, (x, y))
-            else:
-                # If the item is locked (counter == 0), draw the '???' image
-                locked_image = pygame.transform.scale(self.locked_image, (self.slot_size, self.slot_size))
-                self.screen.blit(locked_image, (x, y))
+            # Retrieve the item name from the JSON keys
+            item_name = item_names[i] if i < len(item_names) else None
 
-            counter_text = self.description_font.render(str(counter_value), True, (255, 255, 255))
-            counter_position = (x + self.slot_size - 15, y + self.slot_size - 15)  # Adjust for positioning
-            self.screen.blit(counter_text, counter_position)
+            if item_name:
+                # Fetch the counter value using the proper item name
+                counter_value = self.item_to_slot_count.get(item_name, 0)
 
+                # If the item is unlocked (counter > 0), draw the item image
+                if counter_value > 0:
+                    if i < len(self.item_images):  # Ensure index is within bounds of the item_images list
+                        item_image = self.item_images[i]  # Access the image via index
+                        item_image_scaled = pygame.transform.scale(item_image, (self.slot_size, self.slot_size))
+                        self.screen.blit(item_image_scaled, (x, y))
+                else:
+                    # If the item is locked (counter == 0), draw the '???' image
+                    locked_image = pygame.transform.scale(self.locked_image, (self.slot_size, self.slot_size))
+                    self.screen.blit(locked_image, (x, y))
 
+                counter_text = self.description_font.render(str(counter_value), True, (255, 255, 255))
+                counter_position = (x + self.slot_size - 15, y + self.slot_size - 15)  # Adjust for positioning
+                self.screen.blit(counter_text, counter_position)
 
-            # Draw the animation on the selected slot (on top of item image)
-            if self.selected_slot == i:  
-                frame_index = (self.animation_index // self.animation_speed) % len(self.idle_frames)
-                frame = self.idle_frames[frame_index]
-                self.screen.blit(frame, (x, y))  # Draw animation on top of the item image if selected
+                # Draw the animation on the selected slot (on top of item image)
+                if self.selected_slot == i:  
+                    frame_index = (self.animation_index // self.animation_speed) % len(self.idle_frames)
+                    frame = self.idle_frames[frame_index]
+                    self.screen.blit(frame, (x, y))  # Draw animation on top of the item image if selected
 
         # Draw crafting interface
         self.draw_crafting_interface()
-
-        # Draw crafting slots
-        for i, (x, y) in enumerate(self.crafting_slots):
-            pygame.draw.rect(self.screen, (100, 100, 100), (x, y, self.slot_size, self.slot_size))
-            pygame.draw.rect(self.screen, (200, 200, 200), (x, y, self.slot_size, self.slot_size), 2)
-            if i == 0 and self.selected_slot1 is not None:
-                item_image = pygame.transform.scale(self.item_images[self.selected_slot1], (self.slot_size, self.slot_size))
-                self.screen.blit(item_image, (x, y))
-            elif i == 1 and self.selected_slot2 is not None:
-                item_image = pygame.transform.scale(self.item_images[self.selected_slot2], (self.slot_size, self.slot_size))
-                self.screen.blit(item_image, (x, y))
-            elif i == 2:
-                pygame.draw.rect(self.screen, (150, 150, 150), (x, y, self.slot_size, self.slot_size))  # Placeholder for product slot
-            elif i == 3:
-                self.merge_button_rect = pygame.Rect(x, y, self.slot_size, self.slot_size)
-                pygame.draw.rect(self.screen, (0, 200, 0), self.merge_button_rect)  # Green button background
-                merge_text = self.font.render('Merge', True, (255, 255, 255))
-                self.screen.blit(merge_text, (x + 5, y + 5))  # Positioning 'Merge' in the center
-
-        # Draw the operation symbols
-        operation_font = pygame.font.SysFont(None, 50)
-        plus_text = operation_font.render('+', True, (255, 255, 255))
-        equals_text = operation_font.render('=', True, (255, 255, 255))
-        self.screen.blit(plus_text, (self.crafting_slots[0][0] + self.slot_size + 10, self.crafting_slots[0][1] + 10))
-        self.screen.blit(equals_text, (self.crafting_slots[1][0] + self.slot_size + 10, self.crafting_slots[1][1] + 10))
 
         # Draw the left screen (item image) inside the inventory window
         left_screen_x = self.inventory_position[0] + self.padding
