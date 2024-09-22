@@ -229,7 +229,7 @@ def update_and_draw_inventory():
 
 # Main loop
 running = True
-game = mini.minigame1(screen)
+# game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
 
@@ -271,9 +271,9 @@ while running:
                 cu.totalupg += 1
                 cu.passivegain += 1
                 r.Luck += 0.1
-        if minigame_button.draw(screen):
-            pygame.mouse.set_visible(False)
-            game.run(screen)
+        # if minigame_button.draw(screen):
+        #     pygame.mouse.set_visible(False)
+        #     game.run(screen)
 
         # Check if inventory is open and draw the inventory if it is
         if inventory.is_open:

@@ -99,12 +99,12 @@ class Inventory:
             pygame.image.load('Images/wormitem.png').convert_alpha(),
             pygame.image.load('Images/judgeitem.png').convert_alpha(),
             pygame.image.load('Images/gambleritem.png').convert_alpha(),
-            pygame.image.load('Images/anti-womenitem.png').convert_alpha(),
+            pygame.image.load('Images/babyitem.png').convert_alpha(),
             pygame.image.load('Images/comedianitem.png').convert_alpha(),
             pygame.image.load('Images/farmeritem.png').convert_alpha(),
             pygame.image.load('Images/catitem.png').convert_alpha(),
             pygame.image.load('Images/freakyitem.png').convert_alpha(),
-            pygame.image.load('Images/cogitem.png').convert_alpha(),
+            pygame.image.load('Images/misogynistitem.png').convert_alpha(),
             pygame.image.load('Images/specialzitem.png').convert_alpha(),
             pygame.image.load('Images/nahitem.png').convert_alpha(),
             pygame.image.load('Images/voiditem.png').convert_alpha(),
@@ -255,14 +255,13 @@ class Inventory:
 
     def merge_items(self):
         # Define your item merge combinations
-        combinations =  {
-            ('Common', 'Uncommon'): "Finger",  # item0 + item1 = equip0
-            ('Mythic', 'Fraud'): "Baby Rattle",  # item2 + item3 = equip1
-            ('Worm', 'Gambler'): "ISOH",  # item4 + item5 = equip2
-            ('Cat', 'Freaky'): "Jail World",  # item6 + item7 = equip3
-            ('Nah', 'Void'): "Sex() Eyes",  # item8 + item9 = equip4
-            # Add more recipes as needed
-        }
+        combinations = {
+                frozenset(('Common', 'Uncommon')): "Finger",
+                frozenset(('Baby', 'Fraud')): "Baby Rattle",
+                frozenset(('Worm', 'Gambler')): "ISOH",
+                frozenset(('Cat', 'Freaky')): "Jail World",
+                frozenset(('Nah', 'Void')): "Sex() Eyes",
+            }
 
         with open('Game/item_to_slot_count.json', 'r') as file:
             item_data = json.load(file)
@@ -275,9 +274,9 @@ class Inventory:
             slot2_item = item_names[self.selected_slot2]
 
             # Ensure slots are different and valid
-            if slot1_item != slot2_item and (slot1_item, slot2_item) in combinations:
+            if slot1_item != slot2_item and frozenset((slot1_item, slot2_item)) in combinations:
                 # Get the resulting equipment item from the combination
-                result_item = combinations[(slot1_item, slot2_item)]
+                result_item = combinations[frozenset((slot1_item, slot2_item))]
 
                 # Update the counters in item_to_slot_count.json
                 self.update_item_counts(slot1_item, slot2_item, result_item)
@@ -360,23 +359,22 @@ class Inventory:
 
             # Define your combinations here (make sure this matches your existing recipe dictionary)
             combinations = {
-                ('Common', 'Uncommon'): "Finger",
-                ('Mythic', 'Fraud'): "Baby Rattle",
-                ('Worm', 'Gambler'): "ISOH",
-                ('Cat', 'Freaky'): "Jail World",
-                ('Nah', 'Void'): "Sex() Eyes",
+                frozenset(('Common', 'Uncommon')): "Finger",
+                frozenset(('Baby', 'Fraud')): "Baby Rattle",
+                frozenset(('Worm', 'Gambler')): "ISOH",
+                frozenset(('Cat', 'Freaky')): "Jail World",
+                frozenset(('Nah', 'Void')): "Sex() Eyes",
             }
 
             # Check if the selected items form a valid recipe
-            if (slot1_item, slot2_item) in combinations:
-                product_item = combinations[(slot1_item, slot2_item)]
+            if frozenset((slot1_item, slot2_item)) in combinations:
+                product_item = combinations[frozenset((slot1_item, slot2_item))]
                 product_image_index = list(self.item_to_slot_count.keys()).index(product_item)
 
                 # Draw the product image
                 product_image = pygame.transform.scale(self.item_images[product_image_index], (self.slot_size, self.slot_size))
                 product_slot_pos = (self.inventory_position[0] + 210, self.inventory_position[1] + self.inventory_height - 186)
                 self.screen.blit(product_image, product_slot_pos)
-                print(f"Displaying product image for: {product_item}")
                 # Set a flag so that the product image is displayed only once
                 self.product_displayed = True
 
