@@ -1,102 +1,102 @@
 {
     "0": {
         "name": "Common Item",
-        "description": "A basic common item."
+        "description": "Fourth grade."
     },
     "1": {
         "name": "Uncommon Item",
-        "description": "A slightly better item."
+        "description": "Third grade."
     },
     "2": {
         "name": "Rare Item",
-        "description": "A rare and valuable item."
+        "description": "Second grade."
     },
     "3": {
         "name": "Epic Item",
-        "description": "An item with legendary effects lol."
+        "description": "First grade."
     },
     "4": {
         "name": "Legendary Item",
-        "description": "It is said to have the Dev's Power."
+        "description": "Special grade."
     },
     "5": {
         "name": "Mythic Item",
-        "description": "Placeholder 6."
+        "description": "Special grade disaster."
     },
     "6": {
         "name": "Fraud Item",
-        "description": "Placeholder 7."
+        "description": "Save me Mahoraga!"
     },
     "7": {
         "name": "Worm Item",
-        "description": "Placeholder 8."
+        "description": "To the one who left it all behind! And His overwhelming Intensity!!."
     },
     "8": {
         "name": "Judge Item",
-        "description": "Placeholder 9."
+        "description": "Even if I'm the only one, I want to keep my eyes open."
     },
     "9": {
         "name": "Gambler Item",
-        "description": "Placeholder 10."
+        "description": "If you're unsure of who'll win, always bet on Hakari."
     },
     "10": {
         "name": "Baby Item",
-        "description": "Placeholder 11."
+        "description": "Goo Goo Gaa Gaa."
     },
     "11": {
         "name": "Comedian Item",
-        "description": "Placeholder 12."
+        "description": "He laughed."
     },
     "12": {
         "name": "Farmer Item",
-        "description": "Placeholder 13."
+        "description": "Are you a farmer?."
     },
     "13": {
         "name": "Cat Item",
-        "description": "Placeholder 14."
+        "description": "bruhhhh howd u knowwwww."
     },
     "14": {
         "name": "Freaky Item",
-        "description": "Placeholder 15."
+        "description": "Stand proud, you're strong."
     },
     "15": {
         "name": "Mysogynist Item",
-        "description": "Placeholder 16."
+        "description": "Enough about women's rights. Let's talk about women's wrong."
     },
     "16": {
         "name": "Specialz Item",
-        "description": "Placeholder 17."
+        "description": "You are my Specialz."
     },
     "17": {
         "name": "Nah Item",
-        "description": "Placeholder 18."
+        "description": "I'd Win."
     },
     "18": {
         "name": "Void Item",
-        "description": "Placeholder 19."
+        "description": "The Strongest Sorceror of Today."
     },
     "19": {
         "name": "Malevolent Item",
-        "description": "Placeholder 20."
+        "description": "The Strongest Sorceror in History."
     },
     "20": {
         "name": "Finger Equipment",
-        "description": "Placeholder 21."
+        "description": "Epic + Legendary."
     },
     "21": {
         "name": "Baby Rattle Equipment",
-        "description": "Placeholder 22."
+        "description": "Baby + Fraud."
     },
     "22": {
         "name": "ISOH Equipment",
-        "description": "Placeholder 23."
+        "description": "Worm + Gambler."
     },
     "23": {
         "name": "Jail World",
-        "description": "Placeholder 24."
+        "description": "Cat + Freaky."
     },
     "24": {
         "name": "Sex() Eyes",
-        "description": "Placeholder 25."
+        "description": "Nah + Void."
     }
 }

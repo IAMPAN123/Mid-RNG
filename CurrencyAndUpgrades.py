@@ -1,7 +1,19 @@
 #WIP
 import pygame
+import Game.inventory as gi
+import json as js
 
-gold = 100
+def loadgold():
+    try:
+        with open('Game/gold_save.json', 'r') as file:
+            return js.load(file)
+    except FileNotFoundError:
+        # Handle file not found error
+        return {}
+
+load = loadgold()
+
+gold = load["gold"]
 
 #Gold
 if gold < 0:
@@ -19,7 +31,7 @@ def purchase(amount):
         gold -= amount
 
 #Upgrade
-totalupg = 0
-passivegain = 0
+totalupg = load["totalupgrade"]
+passivegain = load["passivegain"]
 
 #tinput = rollgold(int(input()))

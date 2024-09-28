@@ -11,6 +11,16 @@ import json
 # Load item-to-slot mapping from JSON
 with open('Game/item_to_slot_count.json', 'r') as file:
     item_to_slot_count = json.load(file)
+#load gold from save file
+def savegold(var, val):
+    with open('Game/gold_save.json', 'r') as file:
+        save = json.load(file)
+
+    save[var] = val
+
+    with open('Game/gold_save.json', 'w') as file:
+        json.dump(save, file)
+
 pygame.init()
 
 # Set up the screen
@@ -49,13 +59,14 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-testupgimg = pygame.image.load("Images/minigameicon.png").convert_alpha()
+testupgimg = pygame.image.load("Images/upgimg.png").convert_alpha()
 equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
 return_img = pygame.image.load("Images/return.png").convert_alpha()
 mute_img = pygame.image.load("Images/mute.png").convert_alpha()
 open_img = pygame.image.load("Images/opsound.png").convert_alpha()
 increase_img = pygame.image.load("Images/icsound.png").convert_alpha()
 decrease_img = pygame.image.load("Images/dcsound.png").convert_alpha()
+minigame_img = pygame.image.load("Images/minigameicon.png").convert_alpha()
 
 
 # Create button instances
@@ -64,12 +75,12 @@ exit_button = Button(0, 0, exit_img, width = 250, height = 94, effect_enabled = 
 backpack_button = Button(100, 600, backpack_img, width= 100 , height= 95)
 roll_button = Button(300, 600, roll_img, width = 249, height = 95)
 setting_button = Button(500, 600, setting_img, width = 100, height = 95)
-instructions_button = Button(0, 0, instructions_img, width = 250, height = 96, effect_enabled = False)
+instructions_button = Button(0, 0, instructions_img, width = 250, height = 96)
 cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled = False)
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
-minigame_button = Button(50, 300, testupgimg, width = 50, height = 50)
+minigame_button = Button(50, 300, minigame_img, width = 50, height = 50)
 mute_button = Button(0, 0, mute_img, width = 72, height = 76)
 open_button = Button(0, 0, open_img, width = 75, height = 82)
 ic_button = Button(0, 0, increase_img, width = 70, height = 79)
@@ -101,6 +112,21 @@ nah_paths = [f'Images/nah pic/nah_{i:03}.png' for i in range(32)]
 void_paths = [f'Images/void pic/void_{i:03}.png' for i in range(33)]
 malevolent_paths = [f'Images/malevolent pic/malevolent_{i:03}.png' for i in range(33)]
 
+fraud_itempaths = [f'Images/fraud item/fraud item_{i:03}.png' for i in range(27)]
+worm_itempaths = [f'Images/worm item/worm item_{i:03}.png' for i in range(27)]
+judge_itempaths = [f'Images/judge item/judge item_{i:03}.png' for i in range(27)]
+gambler_itempaths = [f'Images/gambler item/gambler item_{i:03}.png' for i in range(27)]
+baby_itempaths = [f'Images/baby item/baby item_{i:03}.png' for i in range(27)]
+comedian_itempaths = [f'Images/comedian item/comedian item_{i:03}.png' for i in range(27)]
+farmer_itempaths = [f'Images/farmer item/farmer item_{i:03}.png' for i in range(27)]
+cat_itempaths = [f'Images/cat item/cat item_{i:03}.png' for i in range(27)]
+freaky_itempaths = [f'Images/freaky item/freaky item_{i:03}.png' for i in range(27)]
+misogynint_itempaths = [f'Images/misogynint item/misogynint item_{i:03}.png' for i in range(27)]
+specialz_itempaths = [f'Images/specialz item/specialz item_{i:03}.png' for i in range(27)]
+nah_itempaths = [f'Images/nah item/nah item_{i:03}.png' for i in range(27)]
+void_itempaths = [f'Images/void item/void item_{i:03}.png' for i in range(27)]
+malevolent_itempaths = [f'Images/malevolent item/malevolent item_{i:03}.png' for i in range(27)]
+
 # Create animation instances
 animations = {
     'Common': Animation(common_paths, (450, 253), (75, 95)),
@@ -125,27 +151,22 @@ animations = {
     'Malevolent':  Animation(malevolent_paths, (450, 253), (75, 95)),
 }
 
-rarity_images = {
-    'Fraud': ('Images/item images/Fraud.png',(150,212)),
-    'Worm': ('Images/item images/Worm.png',(200,180)),
-    'Judge': ('Images/item images/Judge.png',(200,139)),
-    'Gambler': ('Images/item images/Gambler.png',(200,200)),
-    'Baby': ('Images/item images/Baby.png',(200,150)),
-    'Comedian': ('Images/item images/Comedian.png',(150,190)),
-    'Farmer': ('Images/item images/Farmer.png',(150,207)),
-    'Cat': ('Images/item images/Cat.png',(200,201)),
-    'Freaky': ('Images/item images/Freaky.png',(200,180)),
-    'Misogynint': ('Images/item images/Misogynist.png',(200,142)),
-    'Specialz': ('Images/item images/Specialz.png',(200,189)),
-    'Nah': ('Images/item images/Nah.png',(200,112)),
-    'Void': ('Images/item images/Void.png',(200,200)),
-    'Malevolent': ('Images/item images/Malevolent.png',(200,200)),
+rarity_item = {
+    'Fraud': Animation(fraud_itempaths, (400, 225), (100, 300)),
+    'Worm': Animation(worm_itempaths, (400, 225), (100, 300)),
+    'Judge': Animation(judge_itempaths, (400, 225), (100, 300)),
+    'Gambler': Animation(gambler_itempaths, (400, 225), (100, 300)),
+    'Baby':  Animation(baby_itempaths, (400, 225), (100, 300)),
+    'Comedian': Animation(comedian_itempaths, (400, 225), (100, 300)),
+    'Farmer': Animation(farmer_itempaths, (400, 225), (100, 300)),
+    'Cat': Animation(cat_itempaths, (400, 225), (100, 300)),
+    'Freaky': Animation(freaky_itempaths, (400, 225), (100, 300)),
+    'Misogynint': Animation(misogynint_itempaths, (400, 225), (100, 300)),
+    'Specialz': Animation(specialz_itempaths, (400, 225), (100, 300)),
+    'Nah': Animation(nah_itempaths, (400, 225), (100, 300)),
+    'Void': Animation(void_itempaths, (400, 225), (100, 300)),
+    'Malevolent': Animation(malevolent_itempaths, (400, 225), (100, 300)),
 }
-
-display_image = None
-image_display_time = 2000  
-image_display_start_time = 0
-image_visible = False
 
 # Initialize inventory 
 inventory = Inventory(screen)
@@ -154,13 +175,17 @@ inventory = Inventory(screen)
 settings_active = False
 instruction_active = False
 current_animation = None
+current_item_animation = None
 
 # Load custom mouse cursor image
 cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
 
 def roll():
-    global current_animation, image_visible, image_display_start_time, display_image
-    image_visible = False
+    global current_animation, current_item_animation
+
+    current_animation = None
+    current_item_animation = None
+    
     for x in reversed(r.Rarity):
             NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
             ActualFinalChance = 1/NotActualFinalChance
@@ -180,15 +205,13 @@ def roll():
                         inventory.save_item_counts()
 
                      # Set the animation based on rarity
-                    current_animation = animations[x]
-                    current_animation.reset()
+                    if x in animations:
+                        current_animation = animations[x]
+                        current_animation.reset()
 
-                    if x in rarity_images:
-                        image_path, image_size = rarity_images[x]
-                        display_image = pygame.image.load(image_path).convert_alpha()
-                        display_image = pygame.transform.scale(display_image, image_size)  # 按指定尺寸缩放
-                        image_visible = True
-                        image_display_start_time = pygame.time.get_ticks()
+                    if x in rarity_item:
+                        current_item_animation = rarity_item[x]
+                        current_item_animation.reset()
 
                     break
                 else:
@@ -201,6 +224,11 @@ def setting():
     if instruction_active:
         instruction()
     else:
+
+        # Disable other buttons
+        for button in [backpack_button, roll_button, setting_button, testupg]:
+            button.button_enabled = False
+
         # Draw setting panel
         panel_rect = pygame.Rect(100, 150, 400, 400)
         pygame.draw.rect(screen, (211, 211, 211), panel_rect)
@@ -216,9 +244,17 @@ def setting():
 
         if cross_button.draw(screen):
             settings_active = False
+            # Enable other buttons
+            for button in [backpack_button, roll_button, setting_button, testupg]:
+                button.button_enabled = True
         if instructions_button.draw(screen):
             instruction_active = True
         if exit_button.draw(screen):
+            #save before quitting
+            savegold('gold', cu.gold)
+            savegold('totalupgrade', cu.totalupg)
+            savegold('passivegain', cu.passivegain)
+            inventory.save_item_counts()
             pygame.quit()
             exit()
 
@@ -244,12 +280,16 @@ def instruction():
     pygame.draw.rect(screen, (255, 255, 255), panel_rect)
 
     # Set font
-    font = pygame.font.SysFont("Comic Sans MS", 20)
+    font = pygame.font.SysFont("Comic Sans MS", 15)
     instruction_text = [
-        "Welcome to the RNG Game!",
-        "1. Roll to get random items.",
-        "2. Upgrade your skills to earn more gold.",
-        "3. Manage your inventory wisely."
+        "Welcome to the MidRNG",
+        "1. Roll to get gold and items with increasing rarity.",
+        "2. Use gold to make a binding vow at the top ",
+        "   right of the screen to earn more gold and luck.",
+        "3. Win the minigame to get even more luck.",
+        "4. Keep increasing your luck to get the rarest item.",
+        "5. To craft in inventory, left click to select and ",
+        "   right click to deselect items."
     ]
     
     # Draw
@@ -263,6 +303,16 @@ def instruction():
         return False
 
     return True
+
+def detect_inventory():
+    # If inventory open, disable other buttons
+    if inventory.is_open:
+        inventory.handle_event(event)
+        for button in [roll_button, setting_button, testupg, backpack_button]:
+            button.button_enabled = False
+    else:
+        for button in [roll_button, setting_button, testupg, backpack_button]:
+            button.button_enabled = True
 
 def fade_out(width, height):
     fade = pygame.Surface((width, height))
@@ -285,8 +335,25 @@ eq = dict(item_to_slot_count)
 for x in eq:
     if x == 'Finger':
         finger = eq[x]
+    elif x == 'Baby Rattle':
+        babyrattle = eq[x]
+    elif x == 'ISOH':
+        isoh = eq[x]
+    elif x == 'Jail World':
+        jailworld = eq[x]
+    elif x == 'Sex() Eyes':
+        sexeyes = eq[x]
+    
 if finger >= 1:
     r.Luck += 0.2
+elif babyrattle >= 1:
+    r.Luck += 0.4
+elif isoh >= 1:
+    r.Luck += 0.8
+elif jailworld >= 1:
+    r.Luck += 2.7
+elif sexeyes >= 1:
+    r.Luck += 8.6
 
 # Main loop
 running = True
@@ -295,6 +362,7 @@ TempLuck = False
 game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
+r.Luck += 0.1 * cu.totalupg
 
 while running:
     screen.blit(bg1, (0, 0))
@@ -316,19 +384,16 @@ while running:
         screen.blit(ldisplay, (10, 30))
         screen.blit(ucost, (450, 70))
 
+        # Open inventory button (backpack)
         if backpack_button.draw(screen):
             inventory.open()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if inventory.is_open:  # Only handle inventory events if it's open
-                inventory.handle_event(event)
-
         if roll_button.draw(screen):
             roll()
+
         if setting_button.draw(screen):
             settings_active = True
+
         if testupg.draw(screen):
             if cu.gold < 100 * (1 + cu.totalupg):
                 pass
@@ -336,7 +401,7 @@ while running:
                 cu.purchase(100 * (1 + cu.totalupg))
                 cu.totalupg += 1
                 cu.passivegain += 1
-                r.Luck += 1
+                r.Luck += 0.1
 
         if TempLuck == False:
             if minigame_button.draw(screen):
@@ -356,6 +421,15 @@ while running:
             mini.status = None
         
         update_and_draw_inventory()
+
+        # Handle inventory events if it's open
+        detect_inventory()
+        
+        # if minigame_button.draw(screen):
+        #     pygame.mouse.set_visible(False)
+        #     game.run(screen)
+        
+        update_and_draw_inventory()  # Redraw the screen after handling logic
             
     # Update and draw the current animation
     if current_animation:
@@ -364,14 +438,14 @@ while running:
         if current_animation.finished:
             current_animation = None
 
-    if image_visible:
-        current_time = pygame.time.get_ticks()
-        if current_time - image_display_start_time < image_display_time:
-            if display_image:
-                screen.blit(display_image, (205, 295))
-        else:
-            image_visible = False  
-            display_image = None  
+        update_and_draw_inventory()
+
+    # Update and draw the current item animation
+    if current_item_animation:
+        current_item_animation.update()
+        current_item_animation.draw(screen)
+        if current_item_animation.finished:
+            current_item_animation = None 
 
     if settings_active:
         # Overlay main screen
@@ -405,6 +479,10 @@ while running:
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #save before quitting
+            savegold('gold', cu.gold)
+            savegold('totalupgrade', cu.totalupg)
+            savegold('passivegain', cu.passivegain)
             inventory.save_item_counts()
             running = False   
 

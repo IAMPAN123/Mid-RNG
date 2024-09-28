@@ -139,10 +139,8 @@ class Inventory:
         """Increment the counter for the given item."""
         if item_name in self.item_to_slot_count:
             self.item_to_slot_count[item_name] += 1
-            print(f"Incrementing counter for {item_name}. Current count: {self.item_to_slot_count[item_name]}")
         else:
             self.item_to_slot_count[item_name] = 1
-            print(f"Item {item_name} not found. Initializing counter to 1.")
 
     def update_item_counts(self, slot1_item, slot2_item, result_item):
         # Load the existing item counts from the JSON file
@@ -166,7 +164,7 @@ class Inventory:
             json.dump(item_counts, f, indent=4)
 
         # Print updated counts for debugging
-        print(f"Updated counts: Slot 1 ({item_counts.get(item1_key, 0)}), Slot 2 ({item_counts.get(item2_key, 0)}), Result ({item_counts.get(result_key, 0)})")
+        #print(f"Updated counts: Slot 1 ({item_counts.get(item1_key, 0)}), Slot 2 ({item_counts.get(item2_key, 0)}), Result ({item_counts.get(result_key, 0)})")
 
         # Update inventory slots immediately after merge
         self.load_item_images()  # Reload images to reflect the new item counts
@@ -193,7 +191,7 @@ class Inventory:
                     self.close()
                 # Ensure merge_button_rect is initialized before checking
                 elif hasattr(self, 'merge_button_rect') and self.merge_button_rect.collidepoint(mouse_x, mouse_y):
-                    print("Merge button clicked")
+                    #print("Merge button clicked")
                     self.merge_items()
                 else:
                     self._check_slot_click(mouse_x, mouse_y)
@@ -210,29 +208,30 @@ class Inventory:
                         self.is_clicking = True
                         self.selected_slot = i
                         self.animation_index = 0
-                        print(f"Slot {i} selected (left-click).")
+                        #print(f"Slot {i} selected (left-click).")
                     break
 
                 elif pygame.mouse.get_pressed()[2]:  # Right-click (select for crafting)
                     # Deselect if the clicked slot is already selected
                     if self.selected_slot1 == i:
                         self.selected_slot1 = None
-                        print(f"Deselected Slot 1 (right-click)")
+                        #print(f"Deselected Slot 1 (right-click)")
                     elif self.selected_slot2 == i:
                         self.selected_slot2 = None
-                        print(f"Deselected Slot 2 (right-click)")
+                        #print(f"Deselected Slot 2 (right-click)")
                     
                     # Select for Slot 1 or Slot 2 if it's not already selected
                     elif self.selected_slot1 is None:
                         if self.selected_slot2 != i:  # Prevent selecting the same slot
                             self.selected_slot1 = i
-                            print(f"Selected Slot 1: {i} (right-click)")
+                            #print(f"Selected Slot 1: {i} (right-click)")
                     elif self.selected_slot2 is None:
                         if self.selected_slot1 != i:  # Prevent selecting the same slot
                             self.selected_slot2 = i
-                            print(f"Selected Slot 2: {i} (right-click)")
+                            #print(f"Selected Slot 2: {i} (right-click)")
                     else:
-                        print(f"Both slots are already selected.")
+                        #print(f"Both slots are already selected.")
+                        pass
 
                     break
 
@@ -244,14 +243,15 @@ class Inventory:
         # Check if the mouse click is within the merge button area
         if merge_button_pos[0] <= mouse_x <= merge_button_pos[0] + button_width and \
             merge_button_pos[1] <= mouse_y <= merge_button_pos[1] + button_height:
-            print("Merge button clicked")
+            #print("Merge button clicked")
 
             # Check if both slots are selected
             if self.selected_slot1 is not None and self.selected_slot2 is not None:
                 # Perform the merge logic (based on your specific merge rules)
                 self.merge_items()
             else:
-                print("Please select two items to merge.")
+                #print("Please select two items to merge.")
+                pass
 
     def merge_items(self):
         # Define your item merge combinations
@@ -280,7 +280,7 @@ class Inventory:
 
                 # Update the counters in item_to_slot_count.json
                 self.update_item_counts(slot1_item, slot2_item, result_item)
-                print(f"Merge successful: Created {result_item}")
+                #print(f"Merge successful: Created {result_item}")
 
                 #Update the inventory display after merging
                 self.item_to_slot_count[slot1_item] -= 1
@@ -298,9 +298,11 @@ class Inventory:
                 self.selected_slot2 = None
 
             else:
-                print("Invalid combination or slots not selected.")
+                #print("Invalid combination or slots not selected.")
+                pass
         else:
-            print("Both slots must be selected for merging.")
+            #print("Both slots must be selected for merging.")
+            pass
 
     def update_animation(self):
         if self.selected_slot is not None:
@@ -310,6 +312,29 @@ class Inventory:
             # Ensure the index wraps around the number of frames to loop the animation
             if self.animation_index >= len(self.idle_frames) * self.animation_speed:
                 self.animation_index = 0
+            
+    def wraptext(self, text, max_width):
+        #Wrap text to fit within a certain width.
+        words = text.split(' ')
+        lines = []
+        current_line = ""
+
+        for word in words:
+            # Check if adding the next word exceeds the maximum width
+            test_line = current_line + word + " "
+            test_width, _ = self.description_font.size(test_line)
+
+            if test_width <= max_width:
+                current_line = test_line
+            else:
+                lines.append(current_line.strip())  # Add the current line and reset
+                current_line = word + " "
+
+        # Add the last line
+        if current_line:
+            lines.append(current_line.strip())
+
+        return lines
 
     def draw_crafting_interface(self):
         # Modify the height by changing the y-coordinate
@@ -465,16 +490,18 @@ class Inventory:
                 item_image = pygame.transform.scale(self.item_images[self.selected_slot], (left_screen_width - 20, self.screen_height - 20))
                 self.screen.blit(item_image, (left_screen_rect.x + 10, left_screen_rect.y + 10))  # Add small padding inside
 
-            # Retrieve description for the selected slot from the loaded file
+            #Retrieve description for the selected slot from the loaded file
             description_data = self.item_descriptions.get(str(self.selected_slot), {"name": "Unknown", "description": "No description available."})
-            
-            # Prepare the description text
+
+            #Wrap description text
+            wrapped_description = self.wraptext(description_data['description'], right_screen_width - 20)
+
+            #Prepare the description text
             description_lines = [
                 f"Item Name: {description_data['name']}",
-                "Description:", description_data['description'],
-            ]
+                "Description:"] + wrapped_description
 
-            # Display description on the right screen
+            #Display description on the right screen
             for i, line in enumerate(description_lines):
                 description_text = self.description_font.render(line, True, (255, 255, 255))
-                self.screen.blit(description_text, (right_screen_rect.x + 10, right_screen_rect.y + 10 + i * (self.description_font.get_height() + self.line_spacing)))
+                self.screen.blit(description_text, (right_screen_rect.x + 10, right_screen_rect.y + 10 + i * (self.description_font.get_height() + self.line_spacing))) 
