@@ -11,6 +11,16 @@ import json
 # Load item-to-slot mapping from JSON
 with open('Game/item_to_slot_count.json', 'r') as file:
     item_to_slot_count = json.load(file)
+#load gold from save file
+def savegold(var, val):
+    with open('Game/gold_save.json', 'r') as file:
+        save = json.load(file)
+
+    save[var] = val
+
+    with open('Game/gold_save.json', 'w') as file:
+        json.dump(save, file)
+
 pygame.init()
 
 # Set up the screen
@@ -28,6 +38,7 @@ pygame.mixer.music.play(-1)
 mfont = pygame.font.SysFont("Comic Sans MS", 30)
 nfont = pygame.font.SysFont("Comic Sans MS", 20)
 gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+ldisplay = mfont.render(f'Luck = {round(r.Luck, 1)}', False, (250, 250, 250))
 ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
 
 # Set up background
@@ -48,13 +59,14 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-testupgimg = pygame.image.load("Images/placeholder.png").convert_alpha()
+testupgimg = pygame.image.load("Images/upgimg.png").convert_alpha()
 equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
 return_img = pygame.image.load("Images/return.png").convert_alpha()
 mute_img = pygame.image.load("Images/mute.png").convert_alpha()
 open_img = pygame.image.load("Images/opsound.png").convert_alpha()
 increase_img = pygame.image.load("Images/icsound.png").convert_alpha()
 decrease_img = pygame.image.load("Images/dcsound.png").convert_alpha()
+minigame_img = pygame.image.load("Images/minigameicon.png").convert_alpha()
 
 
 # Create button instances
@@ -68,7 +80,7 @@ cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled =
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
-minigame_button = Button(100, 600, testupgimg, width = 100, height = 100)
+minigame_button = Button(50, 300, minigame_img, width = 50, height = 50)
 mute_button = Button(0, 0, mute_img, width = 72, height = 76)
 open_button = Button(0, 0, open_img, width = 75, height = 82)
 ic_button = Button(0, 0, increase_img, width = 70, height = 79)
@@ -166,8 +178,7 @@ current_animation = None
 current_item_animation = None
 
 # Load custom mouse cursor image
-cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (30, 29))
-pygame.mouse.set_visible(False)  # Hide default mouse cursor
+cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
 
 def roll():
     global current_animation, current_item_animation
@@ -181,7 +192,6 @@ def roll():
             try:
                 Result = random.randint(1, int(ActualFinalChance))
                 if Result == 1:
-                    print(x)
                     cu.gaingold(r.Rarity[x])
                     r.BonusRollCount += 1
                     if r.BonusRollCount == 10:
@@ -240,6 +250,11 @@ def setting():
         if instructions_button.draw(screen):
             instruction_active = True
         if exit_button.draw(screen):
+            #save before quitting
+            savegold('gold', cu.gold)
+            savegold('totalupgrade', cu.totalupg)
+            savegold('passivegain', cu.passivegain)
+            inventory.save_item_counts()
             pygame.quit()
             exit()
 
@@ -265,12 +280,16 @@ def instruction():
     pygame.draw.rect(screen, (255, 255, 255), panel_rect)
 
     # Set font
-    font = pygame.font.SysFont("Comic Sans MS", 20)
+    font = pygame.font.SysFont("Comic Sans MS", 15)
     instruction_text = [
-        "Welcome to the RNG Game!",
-        "1. Roll to get random items.",
-        "2. Upgrade your skills to earn more gold.",
-        "3. Manage your inventory wisely."
+        "Welcome to the MidRNG",
+        "1. Roll to get gold and items with increasing rarity.",
+        "2. Use gold to make a binding vow at the top ",
+        "   right of the screen to earn more gold and luck.",
+        "3. Win the minigame to get even more luck.",
+        "4. Keep increasing your luck to get the rarest item.",
+        "5. To craft in inventory, left click to select and ",
+        "   right click to deselect items."
     ]
     
     # Draw
@@ -305,24 +324,49 @@ def fade_out(width, height):
         pygame.display.update()
         pygame.time.delay(4)
 
-def updategold():
-    screen.fill((0, 0, 0))
-    screen.blit(gdisplay, (10, 0))
-
-def update():
+def update_and_draw_inventory():
     # Check if inventory is open and draw the inventory if it is
     if inventory.is_open:
         inventory.update_animation()  # Call this to update any ongoing animations
         inventory.draw()  # Ensure inventory is drawn when open
 
+#Equipment Luck
+eq = dict(item_to_slot_count)
+for x in eq:
+    if x == 'Finger':
+        finger = eq[x]
+    elif x == 'Baby Rattle':
+        babyrattle = eq[x]
+    elif x == 'ISOH':
+        isoh = eq[x]
+    elif x == 'Jail World':
+        jailworld = eq[x]
+    elif x == 'Sex() Eyes':
+        sexeyes = eq[x]
+    
+if finger >= 1:
+    r.Luck += 0.2
+elif babyrattle >= 1:
+    r.Luck += 0.4
+elif isoh >= 1:
+    r.Luck += 0.8
+elif jailworld >= 1:
+    r.Luck += 2.7
+elif sexeyes >= 1:
+    r.Luck += 8.6
+
 # Main loop
 running = True
-# game = mini.minigame1(screen)
+menumouse = True
+TempLuck = False
+game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
+r.Luck += 0.1 * cu.totalupg
 
 while running:
     screen.blit(bg1, (0, 0))
+    menumouse = True
     pygame.mouse.set_visible(False)
 
     if inventory.current_page == 1:
@@ -334,8 +378,10 @@ while running:
     elif inventory.current_page == 2:
         screen.fill((0, 0, 0))
         gdisplay = mfont.render(f'Gold = {cu.gold}', False, (250, 250, 250))
+        ldisplay = mfont.render(f'Luck = {round(r.Luck, 1)}', False, (250, 250, 250))
         ucost = nfont.render(f'Cost : {100 * (1 + cu.totalupg)}', False, (250, 250, 250))
         screen.blit(gdisplay, (10, 0))
+        screen.blit(ldisplay, (10, 30))
         screen.blit(ucost, (450, 70))
 
         # Open inventory button (backpack)
@@ -357,19 +403,33 @@ while running:
                 cu.passivegain += 1
                 r.Luck += 0.1
 
-        # Event handling
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+        if TempLuck == False:
+            if minigame_button.draw(screen):
+                menumouse = False
+                pygame.mixer.music.pause()
+                pygame.mouse.set_visible(False)
+                game.run(screen)
+                pygame.mixer.music.unpause()
 
-            # Handle inventory events if it's open
-            detect_inventory()
+        #Check if pass minigame
+        if mini.status == 'Pass':
+            r.Luck += 1
+            TempLuck = True
+            TempLuckTimerOld = pygame.time.get_ticks()
+            mini.status = None
+        elif mini.status == 'Fail':
+            mini.status = None
+        
+        update_and_draw_inventory()
+
+        # Handle inventory events if it's open
+        detect_inventory()
         
         # if minigame_button.draw(screen):
         #     pygame.mouse.set_visible(False)
         #     game.run(screen)
         
-        update()  # Redraw the screen after handling logic
+        update_and_draw_inventory()  # Redraw the screen after handling logic
             
     # Update and draw the current animation
     if current_animation:
@@ -378,7 +438,7 @@ while running:
         if current_animation.finished:
             current_animation = None
 
-        update()
+        update_and_draw_inventory()
 
     # Update and draw the current item animation
     if current_item_animation:
@@ -386,8 +446,6 @@ while running:
         current_item_animation.draw(screen)
         if current_item_animation.finished:
             current_item_animation = None 
-
-        update()
 
     if settings_active:
         # Overlay main screen
@@ -399,20 +457,34 @@ while running:
         if setting():
             settings_active = False
 
+    #Timer for passive gold gain
     CurrentTime = pygame.time.get_ticks()
     if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
         LastTimeUpdate = CurrentTime
 
+    #Timer for temporary luck after passing minigame
+    if TempLuck == True:
+        TempLuckTimerNew = pygame.time.get_ticks()
+        if TempLuckTimerNew - TempLuckTimerOld >= 5000:
+            r.Luck -= 1
+            TempLuck = False
+            TempLuckTimerNew = TempLuckTimerOld
+
     # Draw custom mouse cursor
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    screen.blit(cursor_image, (mouse_x, mouse_y))
+    if menumouse == True:
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        screen.blit(cursor_image, (mouse_x, mouse_y))
 
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            #save before quitting
+            savegold('gold', cu.gold)
+            savegold('totalupgrade', cu.totalupg)
+            savegold('passivegain', cu.passivegain)
             inventory.save_item_counts()
-            running = False        
+            running = False   
 
     pygame.display.update()
     clock.tick(60)
