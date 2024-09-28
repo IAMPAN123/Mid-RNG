@@ -1,1 +1,0 @@
-{'slot1': {'rarity': 'legendary', 'count': '1', 'name': 'aura'}}
