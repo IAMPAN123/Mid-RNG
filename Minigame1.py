@@ -13,6 +13,10 @@ ButtonStates = {True : Selected, False : Unselected}
 #hitsound = pygame.mixer.Sound()
 
 
+#music
+spe = pygame.mixer.Sound('Audio/specialz.ogg')
+spe.set_volume(0.5)
+
 #dim
 class sysui:
     @staticmethod
@@ -49,14 +53,6 @@ class printslider:
             slider.hovered = False
         slider.render(self.app)
         return slider.score()
-        
-Score
-def passorfail():
-        global status
-        if status == 'Pass':
-            return True
-        elif status == 'Fail':
-            return False
 
 #circle (straight from huisze)
 class Circle():
@@ -196,8 +192,9 @@ class minigame1:
         #sysui.init(screen)
         #pygame.display.set_caption("minigame1")
         #pygame.mouse.set_visible(False)
+        pygame.mixer.init()
         self.clock = pygame.time.Clock()
-        self.cursor = pygame.image.load('Images/cursor.png').convert_alpha()
+        self.cursor = pygame.image.load('Images/cursor2.png').convert_alpha()
         self.cursor = pygame.transform.scale(self.cursor, (50,50))
         self.halfcursorwidth = self.cursor.get_width()/2
         self.halfcursorheight = self.cursor.get_height()/2
@@ -233,6 +230,7 @@ class minigame1:
         global Score
         global KeyPressed
         global status
+        spe.play()
         screenstate = 'cir1'
         self.running = True
         self.timer = pygame.time.get_ticks()
@@ -241,6 +239,7 @@ class minigame1:
             mousepos = pygame.mouse.get_pos()
 
             if screenstate == 'cir1':
+                
                 screen.fill('black')
                 if self.cir1.draw(screen):
                     Score += 1
@@ -407,13 +406,14 @@ class minigame1:
                 screen.fill('black')
                 print((self.endtimer - self.timer)//1000)
                 try:
-                    if self.endtimer - self.timer < 9000:
+                    if self.endtimer - self.timer < 11000:
                         status = 'Fail'
-                    elif self.endtimer - self.timer > 11000:
+                    elif self.endtimer - self.timer > 13000:
                         status = 'Fail'
                     else:
                         status = 'Pass'
                 finally:
+                    spe.stop()
                     self.running = False
 
             screen.blit(self.cursor, (mousepos[0] - self.halfcursorheight, mousepos[1] - self.halfcursorwidth))
@@ -421,6 +421,7 @@ class minigame1:
             #event handler
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    spe.stop()
                     self.running = False
                 if event.type == pygame.KEYDOWN:
                     KeyPressed = True

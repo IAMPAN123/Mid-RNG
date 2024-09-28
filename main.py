@@ -49,7 +49,7 @@ roll_img = pygame.image.load("Images/roll.png").convert_alpha()
 setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
-testupgimg = pygame.image.load("Images/placeholder.png").convert_alpha()
+testupgimg = pygame.image.load("Images/minigameicon.png").convert_alpha()
 equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
 return_img = pygame.image.load("Images/return.png").convert_alpha()
 mute_img = pygame.image.load("Images/mute.png").convert_alpha()
@@ -69,7 +69,7 @@ cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled =
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
 equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
-minigame_button = Button(100, 600, testupgimg, width = 100, height = 100)
+minigame_button = Button(50, 300, testupgimg, width = 50, height = 50)
 mute_button = Button(0, 0, mute_img, width = 72, height = 76)
 open_button = Button(0, 0, open_img, width = 75, height = 82)
 ic_button = Button(0, 0, increase_img, width = 70, height = 79)
@@ -85,17 +85,67 @@ uncommon_paths = [f'Images/uncommon pic/uncommon_br_{i:03}.png' for i in range(3
 rare_paths = [f'Images/rare pic/rare_br_{i:03}.png' for i in range(34)]
 epic_paths = [f'Images/epic pic/epic_br_{i:03}.png' for i in range(33)]
 legendary_paths = [f'Images/legendary pic/legendary_br_{i:03}.png' for i in range(33)]
-mid_paths = [f'Images/mid pic/mid_br_{i:03}.png' for i in range(34)]
+mythic_paths = [f'Images/mythic pic/mythic_{i:03}.png' for i in range(33)]
+fraud_paths = [f'Images/fraud pic/fraud_{i:03}.png' for i in range(32)]
+worm_paths = [f'Images/worm pic/worm_{i:03}.png' for i in range(33)]
+judge_paths = [f'Images/judge pic/judge_{i:03}.png' for i in range(33)]
+gambler_paths = [f'Images/gambler pic/gambler_{i:03}.png' for i in range(32)]
+baby_paths = [f'Images/baby pic/baby_{i:03}.png' for i in range(33)]
+comedian_paths = [f'Images/comedian pic/comedian_{i:03}.png' for i in range(33)]
+farmer_paths = [f'Images/farmer pic/farmer_{i:03}.png' for i in range(32)]
+cat_paths = [f'Images/cat pic/cat_{i:03}.png' for i in range(32)]
+freaky_paths = [f'Images/freaky pic/freaky_{i:03}.png' for i in range(32)]
+misogynint_paths = [f'Images/misogynint pic/misogynint_{i:03}.png' for i in range(32)]
+specialz_paths = [f'Images/specialz pic/specialz_{i:03}.png' for i in range(32)]
+nah_paths = [f'Images/nah pic/nah_{i:03}.png' for i in range(32)]
+void_paths = [f'Images/void pic/void_{i:03}.png' for i in range(33)]
+malevolent_paths = [f'Images/malevolent pic/malevolent_{i:03}.png' for i in range(33)]
 
 # Create animation instances
 animations = {
-    'Common': Animation(common_paths, (450, 253), (75, 75)),
-    'Uncommon': Animation(uncommon_paths, (450, 253), (75, 75)),
-    'Rare': Animation(rare_paths, (450, 253), (75, 75)),
-    'Epic': Animation(epic_paths, (450, 253), (75, 75)),
-    'Legendary': Animation(legendary_paths, (450, 253), (75, 75)),
-    'Mid': Animation(mid_paths, (450, 253), (75, 75)),
+    'Common': Animation(common_paths, (450, 253), (75, 95)),
+    'Uncommon': Animation(uncommon_paths, (450, 253), (75, 95)),
+    'Rare': Animation(rare_paths, (450, 253), (75, 95)),
+    'Epic': Animation(epic_paths, (450, 253), (75, 95)),
+    'Legendary': Animation(legendary_paths, (450, 253), (75, 95)),
+    'Mythic':  Animation(mythic_paths, (450, 253), (75, 95)),
+    'Fraud':  Animation(fraud_paths, (450, 253), (75, 95)),
+    'Worm':  Animation(worm_paths, (450, 253), (75, 95)),
+    'Judge':  Animation(judge_paths, (450, 253), (75, 95)),
+    'Gambler':  Animation(gambler_paths, (450, 253), (75, 95)),
+    'Baby':  Animation(baby_paths, (450, 253), (75, 95)),
+    'Comedian':  Animation(comedian_paths, (450, 253), (75, 95)),
+    'Farmer':  Animation(farmer_paths, (450, 253), (75, 95)),
+    'Cat':  Animation(cat_paths, (450, 253), (75, 95)),
+    'Freaky':  Animation(freaky_paths, (450, 253), (75, 95)),
+    'Misogynint':  Animation(misogynint_paths, (450, 253), (75, 95)),
+    'Specialz':  Animation(specialz_paths, (450, 253), (75, 95)),
+    'Nah':  Animation(nah_paths, (450, 253), (75, 95)),
+    'Void':  Animation(void_paths, (450, 253), (75, 95)),
+    'Malevolent':  Animation(malevolent_paths, (450, 253), (75, 95)),
 }
+
+rarity_images = {
+    'Fraud': ('Images/item images/Fraud.png',(150,212)),
+    'Worm': ('Images/item images/Worm.png',(200,180)),
+    'Judge': ('Images/item images/Judge.png',(200,139)),
+    'Gambler': ('Images/item images/Gambler.png',(200,200)),
+    'Baby': ('Images/item images/Baby.png',(200,150)),
+    'Comedian': ('Images/item images/Comedian.png',(150,190)),
+    'Farmer': ('Images/item images/Farmer.png',(150,207)),
+    'Cat': ('Images/item images/Cat.png',(200,201)),
+    'Freaky': ('Images/item images/Freaky.png',(200,180)),
+    'Misogynint': ('Images/item images/Misogynist.png',(200,142)),
+    'Specialz': ('Images/item images/Specialz.png',(200,189)),
+    'Nah': ('Images/item images/Nah.png',(200,112)),
+    'Void': ('Images/item images/Void.png',(200,200)),
+    'Malevolent': ('Images/item images/Malevolent.png',(200,200)),
+}
+
+display_image = None
+image_display_time = 2000  
+image_display_start_time = 0
+image_visible = False
 
 # Initialize inventory 
 inventory = Inventory(screen)
@@ -109,7 +159,8 @@ current_animation = None
 cursor_image = pygame.transform.scale(pygame.image.load('Images/cursor.png').convert_alpha(), (40, 39))
 
 def roll():
-    global current_animation
+    global current_animation, image_visible, image_display_start_time, display_image
+    image_visible = False
     for x in reversed(r.Rarity):
             NotActualFinalChance = (r.FinalChance(1/(r.Rarity[x]), r.Luck, r.Bonus))
             ActualFinalChance = 1/NotActualFinalChance
@@ -131,6 +182,13 @@ def roll():
                      # Set the animation based on rarity
                     current_animation = animations[x]
                     current_animation.reset()
+
+                    if x in rarity_images:
+                        image_path, image_size = rarity_images[x]
+                        display_image = pygame.image.load(image_path).convert_alpha()
+                        display_image = pygame.transform.scale(display_image, image_size)  # 按指定尺寸缩放
+                        image_visible = True
+                        image_display_start_time = pygame.time.get_ticks()
 
                     break
                 else:
@@ -222,12 +280,18 @@ def update_and_draw_inventory():
         inventory.update_animation()  # Call this to update any ongoing animations
         inventory.draw()  # Ensure inventory is drawn when open
 
-#luck minus
-UNLUCK = pygame.USEREVENT + 1
+#Equipment Luck
+eq = dict(item_to_slot_count)
+for x in eq:
+    if x == 'Finger':
+        finger = eq[x]
+if finger >= 1:
+    r.Luck += 0.2
 
 # Main loop
 running = True
 menumouse = True
+TempLuck = False
 game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
@@ -272,17 +336,24 @@ while running:
                 cu.purchase(100 * (1 + cu.totalupg))
                 cu.totalupg += 1
                 cu.passivegain += 1
-                r.Luck += 0.1
-        if minigame_button.draw(screen):
-            menumouse = False
-            pygame.mouse.set_visible(False)
-            game.run(screen)
+                r.Luck += 1
 
-        if mini.passorfail() == True:
+        if TempLuck == False:
+            if minigame_button.draw(screen):
+                menumouse = False
+                pygame.mixer.music.pause()
+                pygame.mouse.set_visible(False)
+                game.run(screen)
+                pygame.mixer.music.unpause()
+
+        #Check if pass minigame
+        if mini.status == 'Pass':
             r.Luck += 1
-            pygame.time.set_timer(UNLUCK, 5000)
-        elif mini.passorfail() == False:
-            pass
+            TempLuck = True
+            TempLuckTimerOld = pygame.time.get_ticks()
+            mini.status = None
+        elif mini.status == 'Fail':
+            mini.status = None
         
         update_and_draw_inventory()
             
@@ -293,7 +364,14 @@ while running:
         if current_animation.finished:
             current_animation = None
 
-        update_and_draw_inventory()
+    if image_visible:
+        current_time = pygame.time.get_ticks()
+        if current_time - image_display_start_time < image_display_time:
+            if display_image:
+                screen.blit(display_image, (205, 295))
+        else:
+            image_visible = False  
+            display_image = None  
 
     if settings_active:
         # Overlay main screen
@@ -305,10 +383,19 @@ while running:
         if setting():
             settings_active = False
 
+    #Timer for passive gold gain
     CurrentTime = pygame.time.get_ticks()
     if cu.totalupg > 0 and CurrentTime - LastTimeUpdate >= 1000:
         cu.gold += cu.passivegain
         LastTimeUpdate = CurrentTime
+
+    #Timer for temporary luck after passing minigame
+    if TempLuck == True:
+        TempLuckTimerNew = pygame.time.get_ticks()
+        if TempLuckTimerNew - TempLuckTimerOld >= 5000:
+            r.Luck -= 1
+            TempLuck = False
+            TempLuckTimerNew = TempLuckTimerOld
 
     # Draw custom mouse cursor
     if menumouse == True:
@@ -320,8 +407,6 @@ while running:
         if event.type == pygame.QUIT:
             inventory.save_item_counts()
             running = False   
-        if event.type == UNLUCK:
-            r.Luck -= 1     
 
     pygame.display.update()
     clock.tick(60)
