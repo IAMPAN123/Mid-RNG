@@ -1,4 +1,3 @@
-import random
 import json
 from Game.inventory import Inventory
 
@@ -10,8 +9,17 @@ def load_item_to_slot():
     except FileNotFoundError:
         # Handle file not found error
         return {}
+    
+def loadluck():
+    try:
+        with open('Game/gold_save.json', 'r') as file:
+            return json.load(file)
+    except FileNotFoundError:
+        # Handle file not found error
+        return {}
 
 item_to_slot_count = load_item_to_slot()
+load = loadluck()
 
 # Luck variables
 Base = 1
@@ -19,7 +27,7 @@ Bonus = 1
 BonusRollCount = 0
 
 # Luck Calculation
-Luck = Base
+Luck = load["luck"]
 if BonusRollCount == 10:
     Bonus = 2
 elif BonusRollCount > 10:
