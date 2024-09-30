@@ -254,6 +254,7 @@ class Inventory:
                 pass
 
     def merge_items(self):
+        import Rolling as r
         # Define your item merge combinations
         combinations = {
                 frozenset(('Common', 'Uncommon')): "Finger",
@@ -275,27 +276,33 @@ class Inventory:
 
             # Ensure slots are different and valid
             if slot1_item != slot2_item and frozenset((slot1_item, slot2_item)) in combinations:
-                # Get the resulting equipment item from the combination
-                result_item = combinations[frozenset((slot1_item, slot2_item))]
+                if self.item_to_slot_count[slot1_item] >= 1 and self.item_to_slot_count[slot2_item] >= 1:
+                    # Get the resulting equipment item from the combination
+                    result_item = combinations[frozenset((slot1_item, slot2_item))]
 
-                # Update the counters in item_to_slot_count.json
-                self.update_item_counts(slot1_item, slot2_item, result_item)
-                #print(f"Merge successful: Created {result_item}")
+                    # Update the counters in item_to_slot_count.json
+                    self.update_item_counts(slot1_item, slot2_item, result_item)
+                    #print(f"Merge successful: Created {result_item}")
 
-                #Update the inventory display after merging
-                self.item_to_slot_count[slot1_item] -= 1
-                self.item_to_slot_count[slot2_item] -= 1
-                self.item_to_slot_count[result_item] += 1
+                    eqluck = {"Finger":0.2, "Baby Rattle":0.4, "ISOH":0.8, "Jail World":2.7, "Sex() Eyes":8.6}
+                    for x in eqluck:
+                        if result_item == x:
+                            r.Luck += eqluck[x]
 
-                with open('Game/item_to_slot_count.json', 'w') as file:
-                    json.dump(item_data, file, indent=4)
+                    #Update the inventory display after merging
+                    self.item_to_slot_count[slot1_item] -= 1
+                    self.item_to_slot_count[slot2_item] -= 1
+                    self.item_to_slot_count[result_item] += 1
 
-                # Update inventory slots immediately after merge
-                self.draw()  # Redraw the slots using the existing method
+                    with open('Game/item_to_slot_count.json', 'w') as file:
+                        json.dump(item_data, file, indent=4)
 
-                # Reset selected slots after merging
-                self.selected_slot1 = None
-                self.selected_slot2 = None
+                    # Update inventory slots immediately after merge
+                    self.draw()  # Redraw the slots using the existing method
+
+                    # Reset selected slots after merging
+                    self.selected_slot1 = None
+                    self.selected_slot2 = None
 
             else:
                 #print("Invalid combination or slots not selected.")

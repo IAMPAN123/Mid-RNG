@@ -1,6 +1,4 @@
 #WIP
-import pygame
-import Game.inventory as gi
 import json as js
 
 def loadgold():

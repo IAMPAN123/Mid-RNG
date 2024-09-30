@@ -1,5 +1,6 @@
 import pygame
 import random
+import sys
 import CurrencyAndUpgrades as cu
 import Minigame1 as mini
 from button import Button
@@ -11,7 +12,7 @@ import json
 # Load item-to-slot mapping from JSON
 with open('Game/item_to_slot_count.json', 'r') as file:
     item_to_slot_count = json.load(file)
-#load gold from save file
+#save gold from save file
 def savegold(var, val):
     with open('Game/gold_save.json', 'r') as file:
         save = json.load(file)
@@ -254,9 +255,10 @@ def setting():
             savegold('gold', cu.gold)
             savegold('totalupgrade', cu.totalupg)
             savegold('passivegain', cu.passivegain)
+            savegold('luck', r.Luck)
             inventory.save_item_counts()
             pygame.quit()
-            exit()
+            sys.exit()
 
         if mute_button.draw(screen):
             volume = 0 
@@ -288,8 +290,8 @@ def instruction():
         "   right of the screen to earn more gold and luck.",
         "3. Win the minigame to get even more luck.",
         "4. Keep increasing your luck to get the rarest item.",
-        "5. To craft in inventory, left click to select and ",
-        "   right click to deselect items."
+        "5. To craft in inventory, right click to select and ",
+        "   to deselect items."
     ]
     
     # Draw
@@ -329,31 +331,6 @@ def update_and_draw_inventory():
     if inventory.is_open:
         inventory.update_animation()  # Call this to update any ongoing animations
         inventory.draw()  # Ensure inventory is drawn when open
-
-#Equipment Luck
-eq = dict(item_to_slot_count)
-for x in eq:
-    if x == 'Finger':
-        finger = eq[x]
-    elif x == 'Baby Rattle':
-        babyrattle = eq[x]
-    elif x == 'ISOH':
-        isoh = eq[x]
-    elif x == 'Jail World':
-        jailworld = eq[x]
-    elif x == 'Sex() Eyes':
-        sexeyes = eq[x]
-    
-if finger >= 1:
-    r.Luck += 0.2
-elif babyrattle >= 1:
-    r.Luck += 0.4
-elif isoh >= 1:
-    r.Luck += 0.8
-elif jailworld >= 1:
-    r.Luck += 2.7
-elif sexeyes >= 1:
-    r.Luck += 8.6
 
 # Main loop
 running = True
@@ -483,6 +460,7 @@ while running:
             savegold('gold', cu.gold)
             savegold('totalupgrade', cu.totalupg)
             savegold('passivegain', cu.passivegain)
+            savegold('luck', r.Luck)
             inventory.save_item_counts()
             running = False   
 
