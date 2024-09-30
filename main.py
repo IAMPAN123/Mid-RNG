@@ -5,7 +5,6 @@ import CurrencyAndUpgrades as cu
 import Minigame1 as mini
 from button import Button
 from Game.inventory import Inventory
-from Game.gui import draw_inventory  # Check that draw_inventory is not conflicting with inventory.draw
 from roll_animation import Animation
 
 import json
@@ -61,7 +60,6 @@ setting_img = pygame.image.load("Images/st.png").convert_alpha()
 instructions_img = pygame.image.load("Images/instructions.png").convert_alpha()
 cross_img = pygame.image.load("Images/cross.png").convert_alpha()
 testupgimg = pygame.image.load("Images/upgimg.png").convert_alpha()
-equipment_img = pygame.image.load('Images/equipment.png').convert_alpha()
 return_img = pygame.image.load("Images/return.png").convert_alpha()
 mute_img = pygame.image.load("Images/mute.png").convert_alpha()
 open_img = pygame.image.load("Images/opsound.png").convert_alpha()
@@ -79,7 +77,6 @@ setting_button = Button(500, 600, setting_img, width = 100, height = 95)
 instructions_button = Button(0, 0, instructions_img, width = 250, height = 96)
 cross_button = Button(0, 0, cross_img, width = 90, height = 85, effect_enabled = False)
 testupg = Button(500, 50, testupgimg, width = 100, height = 50)
-equipment_button = Button(100, 450, equipment_img, width=100, height=95)  # Positioned above the inventory button
 return_button = Button(0, 0, return_img, width = 75, height = 75, effect_enabled = False)
 minigame_button = Button(50, 300, minigame_img, width = 50, height = 50)
 mute_button = Button(0, 0, mute_img, width = 72, height = 76)
@@ -339,7 +336,6 @@ TempLuck = False
 game = mini.minigame1(screen)
 clock = pygame.time.Clock()
 LastTimeUpdate = pygame.time.get_ticks()
-r.Luck += 0.1 * cu.totalupg
 
 while running:
     screen.blit(bg1, (0, 0))
